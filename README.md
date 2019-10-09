@@ -7,21 +7,27 @@
 Para la implementación del analizador léxico, se hizo uso de autómatas, 6 en total, estos identifican:
 
 1. **ID**
+
 ![id](assets/id.png)
 
 2. **Números (enteros y flotantes)**
+
 ![number](assets/number.png)
 
 3. **Operadores relacionales (<, >, ==, !=, <=, >=)**
+
 ![oprel](assets/oprel.png)
 
 4. **Palabras reservadas**
+
 ![reserved](assets/reserved.png)
 
 5. **Cadenas**
+
 ![string](assets/string.png)
 
 6. **Símbolos de un carácter**
+
 ![unary](assets/unary.png)
 
 ### Diagramas de clases
