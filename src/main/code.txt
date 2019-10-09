@@ -1,0 +1,29 @@
+{
+// Comentario
+declare
+    int X;
+    char $fizz; // Otro comentario
+	char _fizz;
+	char 9;
+begin
+    x = 10;
+    fizz = "Fizz";
+	print("fizz");
+    Read(x);
+    while(true)
+    {
+        if(x!5 or x==9999){
+            break;
+        }
+        else
+        {
+            x = x * 5;
+        }
+        x = x - 1;
+    }
+    //79do
+    {
+        x = x - 1;
+        print(x)
+    }while(x!=0 and x<10);
+}
