@@ -1,4 +1,4 @@
-package views_controllers;
+package controllers;
 
 public class Controller {
 }
