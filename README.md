@@ -52,7 +52,7 @@ Para la implementación del analizador léxico, se hizo uso de autómatas, 6 en 
 
 #### ID
 
-![id](astOO/lexer/id.png)
+![id](assets/lexer/id.png)
 
 #### Números
 
