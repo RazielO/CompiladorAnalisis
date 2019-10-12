@@ -1,5 +1,28 @@
 # Fase de análisis de un compilador
 
+1. [Análisis léxico](#análisis-léxico)
+    1. [Resultado](#resultado)
+    1. [Autómatas](#autómatas)
+        1. [ID](#id)
+        1. [Números](#números)
+        1. [Operadores relacionales](#operadores-relacionales)
+        1. [Palabras reservadas](#palabras-reservadas)
+        1. [Cadenas](#cadenas)
+        1. [Símbolos de un carácter](#símbolos-de-un-carácter)
+    1. [Diagramas de clases](#diagramas-de-clases)
+        1. [Clase Automaton](#clase-automaton)
+        1. [Clase Control](#clase-control)
+        1. [Clase Error](#clase-error)
+        1. [Clase FileReader](#clase-filereader)
+        1. [Clase KeyPair](#clase-keypair)
+        1. [Clase Lexer](#clase-lexer)
+        1. [Clase PrintErrors](#clase-printerrors)
+        1. [Clase Rules](#clase-rules)
+        1. [Clase Tag](#clase-tag)
+        1. [Clase Token](#clase-token)
+1. [Análisis sintáctico](#análisis-sintáctico)
+1. [Análisis semántico](#análisis-semántico)
+
 ## Análisis léxico
 
 ### Resultado
@@ -27,22 +50,28 @@ El resultado es:
 
 Para la implementación del analizador léxico, se hizo uso de autómatas, 6 en total, estos identifican:
 
-1. **ID**
-![id](assets/lexer/id.png)
+#### ID
 
-2. **Números (enteros y flotantes)**
+![id](astOO/lexer/id.png)
+
+#### Números
+
 ![number](assets/lexer/number.png)
 
-3. **Operadores relacionales (<, >, ==, !=, <=, >=)**
+#### Operadores relacionales
+
 ![oprel](assets/lexer/oprel.png)
 
-4. **Palabras reservadas**
+#### Palabras reservadas
+
 ![reserved](assets/lexer/reserved.png)
 
-5. **Cadenas**
+#### Cadenas
+
 ![string](assets/lexer/string.png)
 
-6. **Símbolos de un carácter**
+#### Símbolos de un carácter
+
 ![unary](assets/lexer/unary.png)
 
 ### Diagramas de clases
