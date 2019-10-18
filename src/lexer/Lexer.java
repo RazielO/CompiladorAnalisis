@@ -38,7 +38,7 @@ public class Lexer
      * @param code lectura del archivo de código
      * @throws FileNotFoundException excepción necesaria para hacer uso del BufferedReader
      */
-    public Lexer(String code) throws FileNotFoundException
+    public Lexer(String code) throws IOException
     {
         Lexer.code = code;
         InputStream inputStream = new ByteArrayInputStream(Lexer.code.getBytes(Charset.forName("UTF-8")));
@@ -52,9 +52,9 @@ public class Lexer
     /**
      * Inicializa todos los automatas leyendo los archivos de reglas y de información.
      *
-     * @throws FileNotFoundException los archivos de reglas o de información no existen
+     * @throws IOException los archivos de reglas o de información no existen
      */
-    private void initAutomata() throws FileNotFoundException
+    private void initAutomata() throws IOException
     {
         String folder = System.getProperty("user.dir") + "/src/lexer/automaton/";
         String[] definitions = {"info/", "rules/"};
