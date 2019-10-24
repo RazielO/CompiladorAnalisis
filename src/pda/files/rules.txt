@@ -1,0 +1,10 @@
+1 a # 1 #a
+1 b # 1 #b
+1 a a 1 aa
+1 a a 2 λ
+1 b a 1 ab
+1 a b 1 bb
+1 a b 2 λ
+2 λ # 3 #
+2 a a 2 λ
+2 b b 2 λ

@@ -10,9 +10,15 @@ import javafx.stage.Stage;
 import lexer.Lexer;
 import lexer.Tag;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import main.*;
+import pda.Control;
+import pda.PushDownAutomaton;
+import pda.Rules;
 
 public class Main extends Application
 {
@@ -41,60 +47,23 @@ public class Main extends Application
     {
         //launch(args);
 
-        Tag tags = new Tag();
-
-        FileReader fileReader = new FileReader();
-        fileReader.setFilename(System.getProperty("user.dir") + "/src/main/code.txt");
-
-        PrintErrors printErrors = new PrintErrors();
-
+        FileReader reader = new FileReader();
         try
         {
-            Lexer lexer = new Lexer(fileReader.read().trim());
+            reader.setFilename(System.getProperty("user.dir") + "/src/pda/files/rules.txt");
+            String rulesReading = reader.read();
+            reader.setFilename(System.getProperty("user.dir") + "/src/pda/files/info.txt");
+            String infoReading = reader.read();
 
-            List<String> tokenList = new ArrayList<>();
-            tokenList.add("TOKEN");
-            List<String> tagList = new ArrayList<>();
-            tagList.add("TAG");
-            List<String> lexemeList = new ArrayList<>();
-            lexemeList.add("LEXEME");
-
-            while (!lexer.isEndOfCode())
-            {
-                int token = lexer.scanNextToken();
-
-                if (token != -1) // No es comentario
-                {
-                    tokenList.add(String.valueOf(token));
-                    tagList.add(String.valueOf(tags.get(token)));
-                    lexemeList.add(lexer.getLexeme());
-                }
-            }
-
-            printErrors.setErrors(lexer.getErrorStack());
-            printErrors.showErrors();
-
-            System.out.println("\n");
-
-            System.out.println("TABLA DE LEXEMAS");
-            List<List<String>> lists = new ArrayList<>();
-            lists.add(tokenList);
-            lists.add(tagList);
-            lists.add(lexemeList);
-            PrintTable tokens = new PrintTable(lists);
-            tokens.print();
-
-            System.out.println("\n");
-            System.out.println("TABLA DE SIMBOLOS");
-            PrintTable printTable = new PrintTable(lexer.getSymbols());
-            printTable.print();
-
-            System.exit(0);
+            PushDownAutomaton pda = new PushDownAutomaton(infoReading, rulesReading);
+            String string= "abbbba";
+            System.out.printf("The string '%s' is valid: %s", string, pda.validString(string));
         }
-        catch (IOException e)
+        catch (FileNotFoundException e)
         {
             e.printStackTrace();
         }
+
         System.exit(0);
     }
 }
