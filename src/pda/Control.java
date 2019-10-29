@@ -23,7 +23,7 @@ public class Control
         this.stack.push(endOfStackSymbol);
     }
 
-    public void nextState(String currentChar) throws NullPointerException
+    void nextState(String currentChar) throws NullPointerException
     {
         this.currentState = this.nextState;
         this.currentChar = currentChar.equals("") ? "λ" : currentChar;
@@ -31,15 +31,14 @@ public class Control
         if (stackChar.equals(this.endOfStackSymbol) && this.stack.size() == 0)
             this.stack.push(this.endOfStackSymbol);
         Key key = new Key(this.currentState, this.currentChar, stackChar);
-        //System.out.printf("Key: '%s'\n", key.toString());
         Value value = this.rules.getNextState(key);
-        for (String val : value.getStack().split(""))
-            if (!val.equals("λ"))
-                this.stack.push(val);
+        if (!value.getStack().equals("λ"))
+            this.stack.push(value.getStack());
         this.nextState = value.getState();
+        System.out.printf("Current State: '%s', Current Char: '%s', Stack: '%s', Next State: '%s'\n", this.currentState, currentChar, this.stack.toString(), this.nextState);
     }
 
-    public int getNextState()
+    int getNextState()
     {
         return nextState;
     }

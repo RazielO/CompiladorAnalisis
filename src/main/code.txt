@@ -1,9 +1,5 @@
 {
-// Comentario
-declare
-    int X;
-begin
-    x = 10;
-    fizz = "Fizz";
-	print(fizz);
+    declare
+        int x;
+    begin
 }

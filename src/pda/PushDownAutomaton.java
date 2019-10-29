@@ -37,8 +37,8 @@ public class PushDownAutomaton
     {
         try
         {
-            for (String letter : string.split(""))
-                control.nextState(letter);
+            for (String token : string.split(" "))
+                control.nextState(token);
             control.nextState("");
 
             return finalStates.contains(control.getNextState());

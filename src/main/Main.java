@@ -50,16 +50,32 @@ public class Main extends Application
         FileReader reader = new FileReader();
         try
         {
-            reader.setFilename(System.getProperty("user.dir") + "/src/pda/files/rules.txt");
-            String rulesReading = reader.read();
-            reader.setFilename(System.getProperty("user.dir") + "/src/pda/files/info.txt");
-            String infoReading = reader.read();
+            reader.setFilename(System.getProperty("user.dir") + "/src/main/code.txt");
+            StringBuilder code = new StringBuilder(reader.read());
+            Lexer lexer = new Lexer(code.toString());
 
-            PushDownAutomaton pda = new PushDownAutomaton(infoReading, rulesReading);
-            String string= "abbbba";
-            System.out.printf("The string '%s' is valid: %s", string, pda.validString(string));
+            code = new StringBuilder();
+            code.append("λ ");
+            while (!lexer.isEndOfCode())
+            {
+                int reading = lexer.scanNextToken();
+                if (reading != -1)
+                    code.append(reading).append(" ");
+            }
+
+            String lexerResult = code.toString().trim();
+            System.out.printf("Lexer result: '%s'\n", lexerResult);
+
+            // Parser
+            reader.setFilename(System.getProperty("user.dir") + "/src/pda/files/info.txt");
+            String info = reader.read();
+            reader.setFilename(System.getProperty("user.dir") + "/src/pda/files/rules.txt");
+            String rules = reader.read();
+            PushDownAutomaton pda = new PushDownAutomaton(info, rules);
+
+            boolean parserResult = pda.validString(lexerResult);
         }
-        catch (FileNotFoundException e)
+        catch (IOException e)
         {
             e.printStackTrace();
         }
