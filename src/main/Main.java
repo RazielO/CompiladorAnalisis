@@ -74,6 +74,7 @@ public class Main extends Application
             PushDownAutomaton pda = new PushDownAutomaton(info, rules);
 
             boolean parserResult = pda.validString(lexerResult);
+            System.out.printf("\nResult: '%s'", parserResult);
         }
         catch (IOException e)
         {

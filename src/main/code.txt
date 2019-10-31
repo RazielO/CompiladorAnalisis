@@ -1,5 +1,8 @@
 {
     declare
-        int x;
     begin
+        while(true)
+        {
+            break;
+        }
 }

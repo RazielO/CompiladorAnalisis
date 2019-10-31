@@ -1,11 +1,13 @@
 package pda;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Rules
 {
-    private Map<Key, Value> ruleSet;
+    private Map<Key, List<Value>> ruleSet;
 
     public Rules(String rulesReading)
     {
@@ -13,15 +15,27 @@ public class Rules
 
         for (String rule : rulesReading.split("\n"))
         {
-            String[] parts = rule.split(" ");
+            try
+            {
+                String[] parts = rule.split(" ");
 
-            Key key = new Key(Integer.parseInt(parts[0]), parts[1], parts[2]);
-            Value value = new Value(Integer.parseInt(parts[3]), parts[4]);
-            ruleSet.put(key, value);
+                Key key = new Key(Integer.parseInt(parts[0]), parts[1], parts[2]);
+                Value value = new Value(Integer.parseInt(parts[3]), parts[4]);
+                if (this.ruleSet.keySet().contains(key))
+                    this.ruleSet.get(key).add(value);
+                else
+                {
+                    this.ruleSet.put(key, new ArrayList<>());
+                    this.ruleSet.get(key).add(value);
+                }
+            }
+            catch (NumberFormatException ignored)
+            {
+            }
         }
     }
 
-    Value getNextState(Key key) throws NullPointerException
+    List<Value> getNextState(Key key) throws NullPointerException
     {
         return this.ruleSet.get(key);
     }
@@ -31,10 +45,10 @@ public class Rules
     {
         StringBuilder string = new StringBuilder("f = {\n");
 
-        for (Map.Entry<Key, Value> entry : this.ruleSet.entrySet())
+        for (Map.Entry<Key, List<Value>> entry : this.ruleSet.entrySet())
         {
             Key key = entry.getKey();
-            Value value = entry.getValue();
+            List<Value> value = entry.getValue();
 
             string.append("\t\t  (").append(key.toString()).append(") = (").append(value.toString()).append("),\n");
         }
