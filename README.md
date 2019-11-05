@@ -1,5 +1,6 @@
 # Fase de análisis de un compilador
 
+1. [Gramática en formato BNF](#gramática-en-formato-bnf)
 1. [Análisis léxico](#análisis-léxico)
     1. [Resultado](#resultado)
     1. [Autómatas](#autómatas)
@@ -22,6 +23,56 @@
         1. [Clase Token](#clase-token)
 1. [Análisis sintáctico](#análisis-sintáctico)
 1. [Análisis semántico](#análisis-semántico)
+
+## Gramática en formato BNF
+
+```
+<programa> ::= { declare <decls> begin <instrs> }
+<decls>    ::= <decl> <decls> 
+             | ε
+<decl>     ::= <tipo> <id>;
+<tipo>     ::= int
+             | float
+             | boolean
+             | char
+<insts>    ::= <inst> <insts>
+<inst>     ::= print(<id>);
+             | read(<id>);
+             | if (<bool>) { <insts> }
+             | if (<bool>) { <insts> } else { <insts> }
+             | while (<bool>) { <insts> }
+             | do { <insts> } while (<bool>);
+             | break;
+             | <asig>
+<asig>     ::= <id> = <expr>;
+<bool>     ::= <bool> or <comb>
+             | <comb>
+<comb>     ::= <comb> and <comp>
+             | <comp>
+<comp>     ::= <expr> <oprel> <expr>
+             | <expr>
+<oprel>    ::= <
+             | >
+             | <=
+             | >=
+             | !=
+             | ==
+<expr>     ::= <expr> + <term>
+             | <expr> - <term>
+             | <term>
+<term>     ::= <term> * <val>
+             | <term> / <val>
+             | <val>
+<val>      ::= <num>
+             | <real>
+             | true
+             | false
+             | <cadena>
+<num>      ::= [0-9]+
+<real>     ::= [0-9]+.[0-9]+
+<cadena>   ::= "[a-zA-Z0-9.,-_]*"
+<id>       ::= [a-z]([a-zA-Z0-9])*
+```
 
 ## Análisis léxico
 
