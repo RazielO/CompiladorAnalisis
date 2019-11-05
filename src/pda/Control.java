@@ -33,38 +33,34 @@ public class Control
             this.stack.push(this.endOfStackSymbol);
         Key key = new Key(this.currentState, this.currentChar, stackChar);
 
-//         ADJUSTMENT START
         List<Value> values = this.rules.getNextState(key);
         if (values.size() == 1)
         {
             Value value = values.get(0);
-            if (!value.getStack().equals("λ"))
-                this.stack.push(value.getStack());
+            for (String aux : value.getStack())
+                if (!aux.equals("λ"))
+                    this.stack.push(aux);
             this.nextState = value.getState();
+            System.out.printf("f(%s) = (%s)\tStack: %s\n", key.toString(), value.toString(), this.stack.toString());
         }
         else
         {
             for (Value value : values)
             {
-                String nextStack = value.getStack();
+                String nextStack = value.getStack()[0];
                 Key auxKey = new Key(2, lookahead, nextStack);
                 List<Value> auxValue = this.rules.getNextState(auxKey);
                 if (auxValue != null)
                 {
-                    if (!value.getStack().equals("λ"))
-                        this.stack.push(value.getStack());
+                    for (String aux : value.getStack())
+                        if (!aux.equals("λ"))
+                            this.stack.push(aux);
                     this.nextState = value.getState();
+                    System.out.printf("f(%s) = (%s)\tStack: %s\n", key.toString(), value.toString(), this.stack.toString());
                 }
             }
 
         }
-//        System.out.printf("Current State: '%s', Current Char: '%s', Stack: '%s', Next State: '%s'\n", this.currentState, currentChar, this.stack.toString(), this.nextState);
-//         ADJUSTMENT END
-
-//        Value value = this.rules.getNextState(key);
-//        if (!value.getStack().equals("λ"))
-//            this.stack.push(value.getStack());
-//        this.nextState = value.getState();
     }
 
     int getNextState()

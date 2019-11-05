@@ -1,9 +1,6 @@
 package pda;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Rules
 {
@@ -20,7 +17,7 @@ public class Rules
                 String[] parts = rule.split(" ");
 
                 Key key = new Key(Integer.parseInt(parts[0]), parts[1], parts[2]);
-                Value value = new Value(Integer.parseInt(parts[3]), parts[4]);
+                Value value = new Value(Integer.parseInt(parts[3]), Arrays.copyOfRange(parts, 4, parts.length));
                 if (this.ruleSet.keySet().contains(key))
                     this.ruleSet.get(key).add(value);
                 else

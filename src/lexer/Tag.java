@@ -46,7 +46,7 @@ public class Tag
         this.tags.put(227, "FLOAT_VAL");
         this.tags.put(228, "PAR_OPEN");
         this.tags.put(229, "PAR_CLOSE");
-        this.tags.put(230, "OP_ARIT");
+        this.tags.put(230, "PLUS");
         this.tags.put(231, "ASIG");
         this.tags.put(232, "SEMI_COLON");
         this.tags.put(233, "CURLY_OPEN");

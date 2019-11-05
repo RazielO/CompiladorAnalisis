@@ -1,11 +1,16 @@
 package pda;
 
+import lexer.Tag;
+
 import java.util.Objects;
 
 public class Key
 {
     private int state;
     private String value, stackValue;
+
+    //TODO: Remove tags
+    Tag tags = new Tag();
 
     Key(int state, String value, String stackValue)
     {
@@ -38,6 +43,9 @@ public class Key
     @Override
     public String toString()
     {
-        return String.format("q%d, %s, %s", this.state, this.value, this.stackValue);
+//        if (!this.value.equals("λ"))
+//            return String.format("q%d, %12s, %5s", this.state, this.tags.get(Integer.parseInt(this.value)), this.stackValue);
+//        else
+            return String.format("q%d, %3s, %3s", this.state, this.value, this.stackValue);
     }
 }

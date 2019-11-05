@@ -64,7 +64,7 @@ public class Main extends Application
             }
 
             String lexerResult = code.toString().trim();
-            System.out.printf("Lexer result: '%s'\n", lexerResult);
+            System.out.printf("Resultado léxico: '%s'\n", lexerResult);
 
             // Parser
             reader.setFilename(System.getProperty("user.dir") + "/src/pda/files/info.txt");
@@ -74,7 +74,7 @@ public class Main extends Application
             PushDownAutomaton pda = new PushDownAutomaton(info, rules);
 
             boolean parserResult = pda.validString(lexerResult);
-            System.out.printf("\nResult: '%s'", parserResult);
+            System.out.printf("\nResultado sintáctico: '%s'", parserResult);
         }
         catch (IOException e)
         {

@@ -1,39 +1,31 @@
 package pda;
 
+import java.util.Arrays;
+
 public class Value
 {
     private int state;
-    private String stack;
+    private String[] stack;
 
-    public Value(int state, String stack)
+    Value(int state, String[] stack)
     {
         this.state = state;
         this.stack = stack;
     }
 
-    public int getState()
+    int getState()
     {
         return state;
     }
 
-    public void setState(int state)
-    {
-        this.state = state;
-    }
-
-    public String getStack()
+    String[] getStack()
     {
         return stack;
-    }
-
-    public void setStack(String stack)
-    {
-        this.stack = stack;
     }
 
     @Override
     public String toString()
     {
-        return String.format("q%d, %s", this.state, this.stack);
+        return String.format("q%d, %10s", this.state, Arrays.toString(this.stack));
     }
 }
