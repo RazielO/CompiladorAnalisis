@@ -146,8 +146,20 @@ public class MainController
 
         Subscription cleanupWhenNoLongerNeedIt = codeArea
                 .multiPlainChanges()
-                .successionEnds(Duration.ofMillis(500))
+                .successionEnds(Duration.ofMillis(100))
                 .subscribe(ignore -> codeArea.setStyleSpans(0, computeHighlighting(getCode())));
+
+        final Pattern whiteSpace = Pattern.compile("^\\s+");
+        codeArea.addEventHandler(KeyEvent.KEY_PRESSED, e ->
+        {
+            if (e.getCode() == KeyCode.ENTER)
+            {
+                int caretPosition = codeArea.getCaretPosition();
+                int currentParagraph = codeArea.getCurrentParagraph();
+                Matcher m0 = whiteSpace.matcher(codeArea.getParagraph(currentParagraph - 1).getSegments().get(0));
+                if (m0.find()) Platform.runLater(() -> codeArea.insertText(caretPosition, m0.group()));
+            }
+        });
     }
 
     private void setCode(String code)
