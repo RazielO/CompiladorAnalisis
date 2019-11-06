@@ -9,8 +9,8 @@
     <HBox alignment="CENTER">
         <MenuBar GridPane.rowIndex="0">
             <Menu text="File">
-                <MenuItem fx:id="fileOpen" text="Open"/>
-                <MenuItem fx:id="fileSave" text="Save"/>
+                <MenuItem fx:id="fileOpen" text="Open   Ctrl+O"/>
+                <MenuItem fx:id="fileSave" text="Save   Ctrl+S"/>
             </Menu>
             <Menu text="Info">
                 <MenuItem fx:id="infoLexical" text="Lexical"/>
