@@ -1,5 +1,6 @@
 package controllers;
 
+import exceptions.PrintErrors;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -13,8 +14,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import lexer.Lexer;
@@ -27,6 +26,7 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.fxmisc.wellbehaved.event.EventPattern;
 import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
+import syntactic.Syntactic;
 
 import java.awt.*;
 import java.io.BufferedWriter;
@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,7 +62,7 @@ public class MainController
     @FXML
     TableView symbolTable;
     @FXML
-    TableColumn colId, colLine, colType;
+    TableColumn colId, colLine, colType, colValue;
     @FXML
     MenuItem fileOpen, fileSave, infoLexical, infoSyntactic, infoSemantic;
 
@@ -87,12 +88,36 @@ public class MainController
 
     private void configureAnalysisButtons()
     {
-        btnLexical.setOnMouseClicked(e -> {
+        btnLexical.setOnMouseClicked(e ->
+        {
             try
             {
                 Lexer lexer = new Lexer(getCode());
-                String result = "Lexical analysis: " + lexer.getResult();
-                txtErrors.setText(result);
+                StringBuilder result = new StringBuilder("Lexical analysis: " + lexer.getResult());
+
+                PrintErrors printErrors = new PrintErrors(lexer.getErrorStack());
+                List<String> lexicalErrors = printErrors.showErrors();
+                btnSyntactic.setDisable(lexicalErrors.size() != 0);
+
+                result.append("\n\n").append("ERRORS:").append("\n");
+                for (String error : lexicalErrors)
+                    result.append("  ").append(error).append("\n");
+                txtErrors.setText(result.toString());
+            }
+            catch (IOException e1)
+            {
+                e1.printStackTrace();
+            }
+        });
+
+        btnSyntactic.setOnMouseClicked(e ->
+        {
+            try
+            {
+                Lexer lexer = new Lexer(getCode());
+                String result = "λ " + lexer.getResult();
+                Syntactic syntactic = new Syntactic();
+                txtErrors.setText(String.valueOf(syntactic.validString(result)));
             }
             catch (IOException e1)
             {
@@ -121,8 +146,18 @@ public class MainController
         menuBar.setPrefWidth(maxWidth);
         menuBar.setPrefHeight(maxHeight * 0.10);
 
-        fileOpen.setOnAction(e -> openFile());
-        fileSave.setOnAction(e -> saveFile());
+        fileOpen.setOnAction(e ->
+        {
+            btnSyntactic.setDisable(true);
+            btnSemantic.setDisable(true);
+            openFile();
+        });
+        fileSave.setOnAction(e ->
+        {
+            btnSyntactic.setDisable(true);
+            btnSemantic.setDisable(true);
+            saveFile();
+        });
         infoLexical.setOnAction(e -> openPdf("Lexer.pdf"));
         infoSyntactic.setOnAction(e -> openPdf("Syntactic.pdf"));
     }
@@ -135,11 +170,12 @@ public class MainController
         codeScrollPane.setPrefWidth((maxWidth / 2) - (maxWidth * 0.05));
         codeScrollPane.setPrefHeight(maxHeight * 0.65);
 
-        InputMap<KeyEvent> im = InputMap.consume(
+        InputMap<KeyEvent> tabInputMap = InputMap.consume(
                 EventPattern.keyPressed(KeyCode.TAB),
                 e -> codeArea.replaceSelection("    ")
         );
-        Nodes.addInputMap(codeArea, im);
+
+        Nodes.addInputMap(codeArea, tabInputMap);
 
         codeArea.multiPlainChanges()
                 .successionEnds(Duration.ofMillis(100))

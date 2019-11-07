@@ -1,4 +1,4 @@
-package pda;
+package syntactic.pda;
 
 import java.util.Arrays;
 

@@ -1,1 +1,1 @@
-100, Token desconocido.
+100, Unknown token.

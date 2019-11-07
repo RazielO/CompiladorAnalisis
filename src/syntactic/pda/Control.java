@@ -1,4 +1,4 @@
-package pda;
+package syntactic.pda;
 
 import java.util.List;
 import java.util.Stack;
@@ -41,7 +41,6 @@ public class Control
                 if (!aux.equals("λ"))
                     this.stack.push(aux);
             this.nextState = value.getState();
-            System.out.printf("f(%s) = (%s)\tStack: %s\n", key.toString(), value.toString(), this.stack.toString());
         }
         else
         {
@@ -56,7 +55,6 @@ public class Control
                         if (!aux.equals("λ"))
                             this.stack.push(aux);
                     this.nextState = value.getState();
-                    System.out.printf("f(%s) = (%s)\tStack: %s\n", key.toString(), value.toString(), this.stack.toString());
                 }
             }
 
@@ -66,6 +64,16 @@ public class Control
     int getNextState()
     {
         return nextState;
+    }
+
+    String peekStackTopSymbol()
+    {
+        return this.stack.peek();
+    }
+
+    String getCurrentChar()
+    {
+        return currentChar;
     }
 
     @Override

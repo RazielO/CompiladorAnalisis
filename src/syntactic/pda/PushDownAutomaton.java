@@ -1,4 +1,4 @@
-package pda;
+package syntactic.pda;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -14,6 +14,9 @@ public class PushDownAutomaton
 
     private Rules rules;
     private Control control;
+
+    private String stackValue;
+    private String value;
 
     public PushDownAutomaton(String infoReading, String rulesReading)
     {
@@ -39,8 +42,8 @@ public class PushDownAutomaton
         {
             String[] parts = string.split(" ");
             for (int i = 0; i < parts.length; i++)
-                control.nextState(parts[i], i + 2 > parts.length ? "" : parts[i + 1]);
-            control.nextState("", "");
+                getNextState(parts[i], i + 2 > parts.length ? "" : parts[i + 1]);
+            getNextState("", "");
 
             return finalStates.contains(control.getNextState());
         }
@@ -48,5 +51,37 @@ public class PushDownAutomaton
         {
             return false;
         }
+    }
+
+    public void getNextState(String current, String lookahead)
+    {
+        setStackValue(control.peekStackTopSymbol());
+        setValue(control.getCurrentChar());
+        control.nextState(current, lookahead);
+    }
+
+    public String getStackValue()
+    {
+        return stackValue;
+    }
+
+    public void setStackValue(String stackValue)
+    {
+        this.stackValue = stackValue;
+    }
+
+    public String getValue()
+    {
+        return value;
+    }
+
+    public void setValue(String value)
+    {
+        this.value = value;
+    }
+
+    public boolean isInValidState()
+    {
+        return finalStates.contains(control.getNextState());
     }
 }

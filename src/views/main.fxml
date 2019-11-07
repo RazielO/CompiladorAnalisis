@@ -29,8 +29,8 @@
         <HBox>
             <Button fx:id="btnStart">Start</Button>
             <Button fx:id="btnLexical">Lexical</Button>
-            <Button fx:id="btnSyntactic">Syntactic</Button>
-            <Button fx:id="btnSemantic">Semantic</Button>
+            <Button fx:id="btnSyntactic" disable="true">Syntactic</Button>
+            <Button fx:id="btnSemantic" disable="true">Semantic</Button>
         </HBox>
     </HBox>
     <Separator orientation="VERTICAL"/>
@@ -47,6 +47,7 @@
                     <TableColumn fx:id="colId" text="ID"/>
                     <TableColumn fx:id="colLine" text="Line"/>
                     <TableColumn fx:id="colType" text="Type"/>
+                    <TableColumn fx:id="colValue" text="Value"/>
                 </columns>
             </TableView>
         </ScrollPane>

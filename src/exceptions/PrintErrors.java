@@ -3,7 +3,9 @@ package exceptions;
 import files.FileReader;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -68,17 +70,21 @@ public class PrintErrors
     }
 
     /**
-     * Vacía la pila imprimiendo el error en stderr, la línea, su tipo y el mensaje.
+     * Vacía la pila agregando el error en una lista con la línea, su tipo y el mensaje.
+     *
+     * @return lista con la línea, su tipo y el mensaje
      */
-    public void showErrors()
+    public List<String> showErrors()
     {
-        System.err.println("ERRORES");
-        while (!errors.empty())
+        List<String> errors = new ArrayList<>();
+        while (!this.errors.empty())
         {
-            Error error = errors.pop();
-            String errorMsg = String.format("Error %s [%d] en la línea %d. %s", errorType(error.getErrorCode()), error.getErrorCode(), error.getLine(), errorCodes.get(error.getErrorCode()));
-            System.err.println(errorMsg);
+            Error error = this.errors.pop();
+            String errorMsg = String.format("Error %s [%d] in line %d. %s", errorType(error.getErrorCode()), error.getErrorCode(), error.getLine(), errorCodes.get(error.getErrorCode()));
+            errors.add(errorMsg);
         }
+
+        return errors;
     }
 
     /**
@@ -91,7 +97,7 @@ public class PrintErrors
     private String errorType(int errorCode)
     {
         if (errorCode >= 100 && errorCode < 200)
-            return "léxico";
+            return "lexical";
         else
             return "otro";
     }

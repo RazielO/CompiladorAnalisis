@@ -174,7 +174,7 @@ public class Lexer
             else if (oprel_automaton.stringInTheLanguage(lexeme))
                 return oprel_automaton.getTokenTag();
             else if (lexeme.equals(""))
-                return -1;
+                return scanNextToken();
             else
                 errorStack.push(new Error(100, line));
         }
