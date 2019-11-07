@@ -234,7 +234,6 @@ public class Lexer
     }
 
     /**
-     *
      * @return pila de errores léxicos
      */
     public Stack<Error> getErrorStack()
@@ -243,11 +242,28 @@ public class Lexer
     }
 
     /**
-     *
      * @return lexema que se acaba de leer
      */
     public String getLexeme()
     {
         return lexeme;
+    }
+
+    /**
+     * Obtiene la cadena completa de tokens obtenidos en el análisis léxico
+     *
+     * @return cadena de tokens obtenidos en el análisis léxico
+     * @throws IOException no se puede leer el siguiente caracter
+     */
+    public String getResult() throws IOException
+    {
+        StringBuilder builder = new StringBuilder();
+        while (!isEndOfCode())
+        {
+            int token = this.scanNextToken();
+            if (token != -1)
+                builder.append(token).append(" ");
+        }
+        return builder.toString().trim();
     }
 }

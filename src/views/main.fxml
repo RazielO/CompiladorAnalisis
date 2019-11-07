@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import org.fxmisc.flowless.VirtualizedScrollPane?>
 <?import org.fxmisc.richtext.CodeArea?>
+<?import javafx.scene.text.TextFlow?>
 <VBox fx:id="mainContainer" alignment="center" xmlns:fx="http://javafx.com/fxml/1"
       xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="controllers.MainController">
     <HBox alignment="CENTER">

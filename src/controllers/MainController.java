@@ -10,12 +10,14 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
+import lexer.Lexer;
 import main.Main;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
@@ -25,10 +27,12 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.fxmisc.wellbehaved.event.EventPattern;
 import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
-import org.reactfx.Subscription;
 
 import java.awt.*;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Collections;
@@ -62,29 +66,6 @@ public class MainController
     MenuItem fileOpen, fileSave, infoLexical, infoSyntactic, infoSemantic;
 
     private String filename;
-    private final String[] KEYWORDS = new String[]{
-            "declare", "begin", "print", "read", "if", "else",
-            "while", "do", "or", "and", "true", "false", "break",
-            "int", "float", "boolean", "char"
-    };
-
-    private final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
-    private final String PAREN_PATTERN = "\\(|\\)";
-    private final String BRACE_PATTERN = "\\{|\\}";
-    private final String BRACKET_PATTERN = "\\[|\\]";
-    private final String SEMICOLON_PATTERN = "\\;";
-    private final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
-    private final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
-
-    private final Pattern PATTERN = Pattern.compile(
-            "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
-                    + "|(?<PAREN>" + PAREN_PATTERN + ")"
-                    + "|(?<BRACE>" + BRACE_PATTERN + ")"
-                    + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
-                    + "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
-                    + "|(?<STRING>" + STRING_PATTERN + ")"
-                    + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
-    );
 
     @FXML
     public void initialize()
@@ -93,7 +74,7 @@ public class MainController
         double maxHeight = Screen.getPrimary().getBounds().getHeight();
         this.filename = "";
 
-
+        configureAnalysisButtons();
         configureCodeArea(maxWidth, maxHeight);
         configureMenu(maxWidth, maxHeight);
         configureMainContainer(maxWidth, maxHeight);
@@ -102,6 +83,22 @@ public class MainController
 
         symbolTableScrollPane.setPrefWidth((maxWidth / 2) - (maxWidth * 0.05));
         symbolTableScrollPane.setPrefHeight(maxHeight * 0.65);
+    }
+
+    private void configureAnalysisButtons()
+    {
+        btnLexical.setOnMouseClicked(e -> {
+            try
+            {
+                Lexer lexer = new Lexer(getCode());
+                String result = "Lexical analysis: " + lexer.getResult();
+                txtErrors.setText(result);
+            }
+            catch (IOException e1)
+            {
+                e1.printStackTrace();
+            }
+        });
     }
 
     private void configureMainContainer(double maxWidth, double maxHeight)
@@ -144,8 +141,7 @@ public class MainController
         );
         Nodes.addInputMap(codeArea, im);
 
-        Subscription cleanupWhenNoLongerNeedIt = codeArea
-                .multiPlainChanges()
+        codeArea.multiPlainChanges()
                 .successionEnds(Duration.ofMillis(100))
                 .subscribe(ignore -> codeArea.setStyleSpans(0, computeHighlighting(getCode())));
 
@@ -204,7 +200,7 @@ public class MainController
         }
         catch (IOException e)
         {
-
+            alertMessage(e.getMessage(), "Error", Alert.AlertType.ERROR, "There was a problem");
         }
     }
 
@@ -250,6 +246,30 @@ public class MainController
 
     private StyleSpans<Collection<String>> computeHighlighting(String text)
     {
+        String[] KEYWORDS = new String[]{
+                "declare", "begin", "print", "read", "if", "else",
+                "while", "do", "or", "and", "true", "false", "break",
+                "int", "float", "boolean", "char"
+        };
+
+        String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
+        String PAREN_PATTERN = "[()]";
+        String BRACE_PATTERN = "[{}]";
+        String BRACKET_PATTERN = "[\\[]]";
+        String SEMICOLON_PATTERN = ";";
+        String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
+        String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
+
+        Pattern PATTERN = Pattern.compile(
+                "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
+                        + "|(?<PAREN>" + PAREN_PATTERN + ")"
+                        + "|(?<BRACE>" + BRACE_PATTERN + ")"
+                        + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
+                        + "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
+                        + "|(?<STRING>" + STRING_PATTERN + ")"
+                        + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
+        );
+
         Matcher matcher = PATTERN.matcher(text);
         int lastKwEnd = 0;
         StyleSpansBuilder<Collection<String>> spansBuilder
