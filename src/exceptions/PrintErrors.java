@@ -90,6 +90,7 @@ public class PrintErrors
     /**
      * Tipo de error:
      * - 100 <= errorCode < 200 -> léxico
+     * - 100 <= errorCode < 200 -> sintáctico
      *
      * @param errorCode número de error
      * @return tipo de error
@@ -98,7 +99,9 @@ public class PrintErrors
     {
         if (errorCode >= 100 && errorCode < 200)
             return "lexical";
+        else if (errorCode >= 200 && errorCode < 300)
+            return "syntactical";
         else
-            return "otro";
+            return "unknown";
     }
 }
