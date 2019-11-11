@@ -6,7 +6,8 @@ import lexer.automaton.Automaton;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.util.Hashtable;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Stack;
 
 /**
@@ -15,7 +16,8 @@ import java.util.Stack;
 public class Lexer
 {
     private static int line = 1;
-    private Hashtable<String, Token> symbols = new Hashtable<>();
+//    private Hashtable<String, Token> symbols = new Hashtable<>();
+    private LinkedList<Token> symbols = new LinkedList<>();
 
     private static String code;
 
@@ -126,7 +128,7 @@ public class Lexer
             {
                 if (current == '/' && lookahead == '/')
                 {
-                    while (current != '\n' && !isEndOfCode())
+                    while (current != '\n' && isNotEndOfCode())
                         readChar();
                     break;
                 }
@@ -156,23 +158,39 @@ public class Lexer
             if (reserved_automaton.stringInTheLanguage(lexeme))
             {
                 int tokenTag = reserved_automaton.getTokenTag();
-                symbols.put(lexeme, new Token(tokenTag, "keyword", 0));
+                symbols.add(new Token(tokenTag, "keyword", lexeme, line));
                 return tokenTag;
             }
             else if (id_automaton.stringInTheLanguage(lexeme))
             {
                 int tokenTag = id_automaton.getTokenTag();
-                symbols.put(lexeme, new Token(tokenTag, "id", line));
+                symbols.add(new Token(tokenTag, "id", lexeme, line));
                 return tokenTag;
             }
             else if (number_automaton.stringInTheLanguage(lexeme))
-                return number_automaton.getTokenTag();
+            {
+                int tokenTag = number_automaton.getTokenTag();
+                symbols.add(new Token(tokenTag, "number", lexeme, line));
+                return tokenTag;
+            }
             else if (string_automaton.stringInTheLanguage(lexeme))
-                return string_automaton.getTokenTag();
+            {
+                int tokenTag = string_automaton.getTokenTag();
+                symbols.add(new Token(tokenTag, "string", lexeme, line));
+                return tokenTag;
+            }
             else if (unary_automaton.stringInTheLanguage(lexeme))
-                return unary_automaton.getTokenTag();
+            {
+                int tokenTag = unary_automaton.getTokenTag();
+                symbols.add(new Token(tokenTag, "unary", lexeme, line));
+                return tokenTag;
+            }
             else if (oprel_automaton.stringInTheLanguage(lexeme))
-                return oprel_automaton.getTokenTag();
+            {
+                int tokenTag = oprel_automaton.getTokenTag();
+                symbols.add(new Token(tokenTag, "opRel", lexeme, line));
+                return tokenTag;
+            }
             else if (lexeme.equals(""))
                 return scanNextToken();
             else
@@ -220,15 +238,15 @@ public class Lexer
     /**
      * @return se leyó todo el código
      */
-    public boolean isEndOfCode()
+    private boolean isNotEndOfCode()
     {
-        return endOfCode;
+        return !endOfCode;
     }
 
     /**
      * @return tabla de símbolos encontrados
      */
-    public Hashtable<String, Token> getSymbols()
+    public LinkedList<Token> getSymbols()
     {
         return symbols;
     }
@@ -258,7 +276,7 @@ public class Lexer
     public String getResult() throws IOException
     {
         StringBuilder builder = new StringBuilder();
-        while (!isEndOfCode())
+        while (isNotEndOfCode())
         {
             int token = this.scanNextToken();
             if (token != -1)
