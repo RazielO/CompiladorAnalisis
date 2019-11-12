@@ -141,8 +141,18 @@ public class MainController
                 Syntactic syntactic = new Syntactic();
                 LinkedList<lexer.Token> tokens = lexer.getSymbols();
                 tokens.add(0, new lexer.Token(-1, "lambda", "λ", 0));
-                txtErrors.setText(String.valueOf(syntactic.validString(tokens)));
 
+                boolean syntacticResult;
+                try
+                {
+                    syntacticResult = syntactic.validString(tokens);
+                }
+                catch (NullPointerException e1)
+                {
+                    syntacticResult = false;
+                }
+
+                txtErrors.setText(String.valueOf(syntacticResult));
                 fillTable(syntactic.getSymbolsTable());
                 Lexer.line = 1;
             }

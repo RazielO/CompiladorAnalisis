@@ -2,6 +2,7 @@ package syntactic.pda;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -65,7 +66,7 @@ public class PushDownAutomaton
         return stackValue;
     }
 
-    public void setStackValue(String stackValue)
+    private void setStackValue(String stackValue)
     {
         this.stackValue = stackValue;
     }
@@ -88,5 +89,10 @@ public class PushDownAutomaton
     public int getState()
     {
         return control.getNextState();
+    }
+
+    public List<Value> possibleValues(String value)
+    {
+        return this.control.possibleStates(value);
     }
 }

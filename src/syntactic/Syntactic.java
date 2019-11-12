@@ -14,6 +14,8 @@ public class Syntactic
     private PushDownAutomaton pda;
     private List<Symbol> symbolsTable;
 
+    private String previous;
+
     public Syntactic() throws IOException
     {
         initAutomaton();
@@ -34,11 +36,16 @@ public class Syntactic
         pda = new PushDownAutomaton(info, rules);
     }
 
-    public boolean validString(LinkedList<Token> tokens)
+    public boolean validString(LinkedList<Token> tokens) throws NullPointerException
     {
         for (int i = 0; i < tokens.size(); i++)
             try
             {
+                if (i != 0)
+                    this.previous = String.valueOf(tokens.get(i - 1).getTag());
+                else
+                    this.previous = String.valueOf(tokens.get(i).getTag());
+
                 String current = String.valueOf(tokens.get(i).getTag());
                 String lookahead = i + 2 > tokens.size() ? "" : String.valueOf(tokens.get(i + 1).getTag());
                 if (tokens.get(i).getTag() == -1) // Lambda
@@ -55,7 +62,8 @@ public class Syntactic
             catch (NullPointerException e)
             {
                 // Error
-                System.err.println(tokens.get(i - 1).getLexeme());
+                pda.possibleValues(previous);
+                throw new NullPointerException();
             }
         pda.getNextState("", "");
 

@@ -14,6 +14,21 @@ public class Key
         this.stackValue = stackValue;
     }
 
+    public int getState()
+    {
+        return state;
+    }
+
+    public String getValue()
+    {
+        return value;
+    }
+
+    public String getStackValue()
+    {
+        return stackValue;
+    }
+
     @Override
     public boolean equals(Object object)
     {

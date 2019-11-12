@@ -1,5 +1,6 @@
 package syntactic.pda;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -12,6 +13,9 @@ public class Control
 
     private Rules rules;
     private Stack<String> stack;
+
+    private String prevStackChar;
+    private String stackChar;
 
     public Control(int initialState, Rules rules, String endOfStackSymbol)
     {
@@ -26,9 +30,11 @@ public class Control
 
     void nextState(String currentChar, String lookahead) throws NullPointerException
     {
+        this.prevStackChar = this.currentChar;
         this.currentState = this.nextState;
         this.currentChar = currentChar.equals("") ? "λ" : currentChar;
-        String stackChar = this.stack.pop();
+        this.prevStackChar = this.stackChar;
+        this.stackChar = this.stack.pop();
         if (stackChar.equals(this.endOfStackSymbol) && this.stack.size() == 0)
             this.stack.push(this.endOfStackSymbol);
         Key key = new Key(this.currentState, this.currentChar, stackChar);
@@ -66,6 +72,18 @@ public class Control
         {
             throw new NullPointerException();
         }
+    }
+
+    List<Value> possibleStates(String previous)
+    {
+        System.out.printf("Stack: %s\n", this.stack.toString());
+        System.out.printf("Prev Stack: %s\n", this.prevStackChar);
+        System.out.printf("Current stack: %s\n", this.stackChar);
+        List<Value> values = new ArrayList<>();
+        for (Key key : this.rules.getRuleSet().keySet())
+            if (key.getState() == 2 && key.getStackValue().equals(this.stackChar))
+                System.out.printf("f(%s) = (%s)\n", key.toString(), this.rules.getNextState(key).toString());
+        return values;
     }
 
     int getNextState()

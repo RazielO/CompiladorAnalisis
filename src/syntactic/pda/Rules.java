@@ -37,6 +37,11 @@ public class Rules
         return this.ruleSet.get(key);
     }
 
+    public Map<Key, List<Value>> getRuleSet()
+    {
+        return ruleSet;
+    }
+
     @Override
     public String toString()
     {
