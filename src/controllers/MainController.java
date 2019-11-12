@@ -2,6 +2,8 @@ package controllers;
 
 import exceptions.PrintErrors;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -10,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -26,6 +29,7 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.fxmisc.wellbehaved.event.EventPattern;
 import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
+import syntactic.Symbol;
 import syntactic.Syntactic;
 
 import java.awt.*;
@@ -34,10 +38,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -79,11 +81,30 @@ public class MainController
         configureCodeArea(maxWidth, maxHeight);
         configureMenu(maxWidth, maxHeight);
         configureMainContainer(maxWidth, maxHeight);
+        configureTable();
         lblFilename.setText("Not selected");
         txtErrors.setPrefWidth(maxWidth * 0.90);
 
         symbolTableScrollPane.setPrefWidth((maxWidth / 2) - (maxWidth * 0.05));
         symbolTableScrollPane.setPrefHeight(maxHeight * 0.65);
+    }
+
+    private void configureTable()
+    {
+        colId.setCellValueFactory(new PropertyValueFactory<Symbol, String>("id"));
+        colLine.setCellValueFactory(new PropertyValueFactory<Symbol, List<Integer>>("lines"));
+        colType.setCellValueFactory(new PropertyValueFactory<Symbol, String>("type"));
+        colValue.setCellValueFactory(new PropertyValueFactory<Symbol, String>("value"));
+    }
+
+    private ObservableList<Symbol> getObservableList(List<Symbol> symbols)
+    {
+        return FXCollections.observableArrayList(new ArrayList<>(symbols));
+    }
+
+    private void fillTable(List<Symbol> symbols)
+    {
+        symbolTable.setItems(getObservableList(symbols));
     }
 
     private void configureAnalysisButtons()
@@ -103,6 +124,7 @@ public class MainController
                 for (String error : lexicalErrors)
                     result.append("  ").append(error).append("\n");
                 txtErrors.setText(result.toString());
+                Lexer.line = 1;
             }
             catch (IOException e1)
             {
@@ -117,7 +139,12 @@ public class MainController
                 Lexer lexer = new Lexer(getCode());
                 String result = "λ " + lexer.getResult();
                 Syntactic syntactic = new Syntactic();
-                txtErrors.setText(String.valueOf(syntactic.validString(result)));
+                LinkedList<lexer.Token> tokens = lexer.getSymbols();
+                tokens.add(0, new lexer.Token(-1, "lambda", "λ", 0));
+                txtErrors.setText(String.valueOf(syntactic.validString(tokens)));
+
+                fillTable(syntactic.getSymbolsTable());
+                Lexer.line = 1;
             }
             catch (IOException e1)
             {

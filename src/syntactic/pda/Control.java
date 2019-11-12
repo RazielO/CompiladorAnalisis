@@ -33,31 +33,38 @@ public class Control
             this.stack.push(this.endOfStackSymbol);
         Key key = new Key(this.currentState, this.currentChar, stackChar);
 
-        List<Value> values = this.rules.getNextState(key);
-        if (values.size() == 1)
+        try
         {
-            Value value = values.get(0);
-            for (String aux : value.getStack())
-                if (!aux.equals("λ"))
-                    this.stack.push(aux);
-            this.nextState = value.getState();
-        }
-        else
-        {
-            for (Value value : values)
+            List<Value> values = this.rules.getNextState(key);
+            if (values.size() == 1)
             {
-                String nextStack = value.getStack()[0];
-                Key auxKey = new Key(2, lookahead, nextStack);
-                List<Value> auxValue = this.rules.getNextState(auxKey);
-                if (auxValue != null)
-                {
-                    for (String aux : value.getStack())
-                        if (!aux.equals("λ"))
-                            this.stack.push(aux);
-                    this.nextState = value.getState();
-                }
+                Value value = values.get(0);
+                for (String aux : value.getStack())
+                    if (!aux.equals("λ"))
+                        this.stack.push(aux);
+                this.nextState = value.getState();
             }
+            else
+            {
+                for (Value value : values)
+                {
+                    String nextStack = value.getStack()[0];
+                    Key auxKey = new Key(2, lookahead, nextStack);
+                    List<Value> auxValue = this.rules.getNextState(auxKey);
+                    if (auxValue != null)
+                    {
+                        for (String aux : value.getStack())
+                            if (!aux.equals("λ"))
+                                this.stack.push(aux);
+                        this.nextState = value.getState();
+                    }
+                }
 
+            }
+        }
+        catch (NullPointerException e)
+        {
+            throw new NullPointerException();
         }
     }
 

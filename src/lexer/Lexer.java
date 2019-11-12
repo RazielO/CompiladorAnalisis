@@ -15,7 +15,7 @@ import java.util.Stack;
  */
 public class Lexer
 {
-    private static int line = 1;
+    public static int line = 1;
 //    private Hashtable<String, Token> symbols = new Hashtable<>();
     private LinkedList<Token> symbols = new LinkedList<>();
 

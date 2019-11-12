@@ -84,4 +84,9 @@ public class PushDownAutomaton
     {
         return finalStates.contains(control.getNextState());
     }
+
+    public int getState()
+    {
+        return control.getNextState();
+    }
 }
