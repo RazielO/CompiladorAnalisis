@@ -194,7 +194,7 @@ public class Lexer
             else if (lexeme.equals(""))
                 return scanNextToken();
             else
-                errorStack.push(new Error(100, line));
+                errorStack.push(new Error(100, line, lexeme));
         }
         return -1;
     }
