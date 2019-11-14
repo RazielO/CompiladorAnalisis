@@ -6,6 +6,7 @@ package exceptions;
 public class Error
 {
     private int errorCode, line;
+    private String info;
 
     /**
      * Constructor de la clase Error.
@@ -17,6 +18,14 @@ public class Error
     {
         this.errorCode = errorCode;
         this.line = line;
+        this.info = null;
+    }
+
+    public Error(int errorCode, int line, String info)
+    {
+        this.errorCode = errorCode;
+        this.line = line;
+        this.info = info;
     }
 
     /**
@@ -53,5 +62,10 @@ public class Error
     public void setLine(int line)
     {
         this.line = line;
+    }
+
+    public String getInfo()
+    {
+        return info;
     }
 }

@@ -80,7 +80,9 @@ public class PrintErrors
         while (!this.errors.empty())
         {
             Error error = this.errors.pop();
-            String errorMsg = String.format("Error %s [%d] in line %d. %s", errorType(error.getErrorCode()), error.getErrorCode(), error.getLine(), errorCodes.get(error.getErrorCode()));
+            String errorMsg;
+            String format = "Error %s [%d] in line %d. %s %s.";
+            errorMsg = String.format(format, errorType(error.getErrorCode()), error.getErrorCode(), error.getLine(), errorCodes.get(error.getErrorCode()), error.getInfo());
             errors.add(errorMsg);
         }
 
