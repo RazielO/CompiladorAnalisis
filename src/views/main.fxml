@@ -18,6 +18,7 @@
                 <MenuItem fx:id="infoLexical" text="Lexical"/>
                 <MenuItem fx:id="infoSyntactic" text="Syntactic"/>
                 <MenuItem fx:id="infoSemantic" text="Semantic"/>
+                <MenuItem fx:id="infoGeneral" text="General"/>
             </Menu>
         </MenuBar>
         <HBox>

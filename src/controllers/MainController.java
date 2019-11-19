@@ -69,7 +69,7 @@ public class MainController
     @FXML
     TableColumn colId, colLine, colType, colValue;
     @FXML
-    MenuItem fileOpen, fileSave, infoLexical, infoSyntactic, infoSemantic, infoGrammar;
+    MenuItem fileOpen, fileSave, infoLexical, infoSyntactic, infoSemantic, infoGrammar, infoGeneral;
 
     private String filename;
 
@@ -206,6 +206,7 @@ public class MainController
         infoLexical.setOnAction(e -> openAnalysisInfo("lexico"));
         infoSyntactic.setOnAction(e -> openAnalysisInfo("sintactico"));
         infoGrammar.setOnAction(e -> openAnalysisInfo("grammar"));
+        infoGeneral.setOnAction(e -> openAnalysisInfo("general"));
     }
 
     private void configureCodeArea(double maxWidth, double maxHeight)
