@@ -5,5 +5,5 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="controllers.AnalysisInfoController">
-    <WebView fx:id="content";
+    <WebView fx:id="content"/>
 </VBox>
