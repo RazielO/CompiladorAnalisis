@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 id="anlisislxico">Analisis lexico</h1>
+
+<h2 id="resultado">Resultado</h2>
+
+<p>En un codigo simple, como el siguiente:</p>
+
+<pre><code>{
+// Comentario
+declare
+    int X;
+begin
+    x = 10;
+    fizz = "Fizz";
+    print(fizz);
+}
+</code></pre>
+
+<p>El resultado es:</p>
+
+<p><img src="lexer/result.png" alt="result"/></p>
+
+<h2 id="autmatas">Automatas</h2>
+
+<p>Para la implementacion del analizador lexico, se hizo uso de automatas, 6 en total, estos identifican:</p>
+
+<h3 id="id">ID</h3>
+
+<p><img src="lexer/id.png" alt="id"/></p>
+
+<h3 id="nmeros">Numeros</h3>
+
+<p><img src="lexer/number.png" alt="number"/></p>
+
+<h3 id="operadoresrelacionales">Operadores relacionales</h3>
+
+<p><img src="lexer/oprel.png" alt="oprel"/></p>
+
+<h3 id="palabrasreservadas">Palabras reservadas</h3>
+
+<p><img src="lexer/reserved.png" alt="reserved"/></p>
+
+<h3 id="cadenas">Cadenas</h3>
+
+<p><img src="lexer/string.png" alt="string"/></p>
+
+<h3 id="smbolosdeuncarcter">Simbolos de un caracter</h3>
+
+<p><img src="lexer/unary.png" alt="unary"/></p>
+
+<h2 id="diagramasdeclases">Diagramas de clases</h2>
+
+<h3 id="claseautomaton">Clase Automaton</h3>
+
+<p><img src="lexer/uml/Automaton.png" alt="automaton"/></p>
+
+<h3 id="clasecontrol">Clase Control</h3>
+
+<p><img src="lexer/uml/Control.png" alt="control"/></p>
+
+<h3 id="claseerror">Clase Error</h3>
+
+<p><img src="lexer/uml/Error.png" alt="error"/></p>
+
+<h3 id="clasefilereader">Clase FileReader</h3>
+
+<p><img src="lexer/uml/FileReader.png" alt="filereader"/></p>
+
+<h3 id="clasekeypair">Clase KeyPair</h3>
+
+<p><img src="lexer/uml/KeyPair.png" alt="keypair"/></p>
+
+<h3 id="claselexer">Clase Lexer</h3>
+
+<p><img src="lexer/uml/Lexer.png" alt="lexer"/></p>
+
+<h3 id="claseprinterrors">Clase PrintErrors</h3>
+
+<p><img src="lexer/uml/PrintErrors.png" alt="printerrors"/></p>
+
+<h3 id="claserules">Clase Rules</h3>
+
+<p><img src="lexer/uml/Rules.png" alt="rules"/></p>
+
+<h3 id="clasetag">Clase Tag</h3>
+
+<p><img src="lexer/uml/Tag.png" alt="tag"/></p>
+
+<h3 id="clasetoken">Clase Token</h3>
+
+<p><img src="lexer/uml/Token.png" alt="token"/></p>
+</body>
+</html>
