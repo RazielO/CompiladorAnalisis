@@ -1,5 +1,6 @@
 package controllers;
 
+import exceptions.Error;
 import exceptions.PrintErrors;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -119,6 +120,7 @@ public class MainController
                 PrintErrors printErrors = new PrintErrors(lexer.getErrorStack());
                 List<String> lexicalErrors = printErrors.showErrors();
                 btnSyntactic.setDisable(lexicalErrors.size() != 0);
+                btnSemantic.setDisable(true);
 
                 result.append("\n\n").append("ERRORS:").append("\n");
                 for (String error : lexicalErrors)
@@ -137,22 +139,26 @@ public class MainController
             try
             {
                 Lexer lexer = new Lexer(getCode());
-                String result = "λ " + lexer.getResult();
+                lexer.getResult();
                 Syntactic syntactic = new Syntactic();
                 LinkedList<lexer.Token> tokens = lexer.getSymbols();
                 tokens.add(0, new lexer.Token(-1, "lambda", "λ", 0));
 
-                boolean syntacticResult;
-                try
-                {
-                    syntacticResult = syntactic.validString(tokens);
-                }
-                catch (NullPointerException e1)
-                {
-                    syntacticResult = false;
-                }
+                syntactic.validString(tokens);
+                Stack<Error> syntacticErrors = syntactic.getErrorStack();
+                boolean syntacticResult = syntacticErrors.empty();
 
-                txtErrors.setText(String.valueOf(syntacticResult));
+                PrintErrors printErrors = new PrintErrors(syntacticErrors);
+                List<String> errors = printErrors.showErrors();
+                btnSemantic.setDisable(syntacticErrors.size() != 0);
+
+                StringBuilder result = new StringBuilder();
+                result.append(syntacticResult);
+                result.append("\n\n").append("ERRORS:").append("\n");
+                for (String error : errors)
+                    result.append("  ").append(error).append("\n");
+
+                txtErrors.setText(result.toString());
                 fillTable(syntactic.getSymbolsTable());
                 Lexer.line = 1;
             }
@@ -202,7 +208,10 @@ public class MainController
     private void configureCodeArea(double maxWidth, double maxHeight)
     {
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
-
+        codeArea.setOnKeyTyped(e -> {
+            btnSemantic.setDisable(true);
+            btnSyntactic.setDisable(true);
+        });
 
         codeScrollPane.setPrefWidth((maxWidth / 2) - (maxWidth * 0.05));
         codeScrollPane.setPrefHeight(maxHeight * 0.65);

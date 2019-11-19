@@ -65,7 +65,6 @@ public class Control
                         this.nextState = value.getState();
                     }
                 }
-
             }
         }
         catch (NullPointerException e)
@@ -74,16 +73,13 @@ public class Control
         }
     }
 
-    List<Value> possibleStates(String previous)
+    List<Key> possibleStates()
     {
-        System.out.printf("Stack: %s\n", this.stack.toString());
-        System.out.printf("Prev Stack: %s\n", this.prevStackChar);
-        System.out.printf("Current stack: %s\n", this.stackChar);
-        List<Value> values = new ArrayList<>();
+        List<Key> keys = new ArrayList<>();
         for (Key key : this.rules.getRuleSet().keySet())
             if (key.getState() == 2 && key.getStackValue().equals(this.stackChar))
-                System.out.printf("f(%s) = (%s)\n", key.toString(), this.rules.getNextState(key).toString());
-        return values;
+                keys.add(key);
+        return keys;
     }
 
     int getNextState()
@@ -91,14 +87,14 @@ public class Control
         return nextState;
     }
 
-    String peekStackTopSymbol()
+    List<Value> getValues(Key key)
     {
-        return this.stack.peek();
+        return this.rules.getNextState(key);
     }
 
-    String getCurrentChar()
+    public int getCurrentState()
     {
-        return currentChar;
+        return currentState;
     }
 
     @Override

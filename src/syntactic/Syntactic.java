@@ -1,11 +1,18 @@
 package syntactic;
 
+import exceptions.Error;
 import files.FileReader;
-import syntactic.pda.PushDownAutomaton;
+import lexer.Tag;
 import lexer.Token;
+import syntactic.pda.Key;
+import syntactic.pda.PushDownAutomaton;
+import syntactic.pda.Value;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
 
 import static java.util.stream.Collectors.toList;
 
@@ -16,10 +23,15 @@ public class Syntactic
 
     private String previous;
 
+    private Stack<Error> errorStack;
+    private Tag tag;
+
     public Syntactic() throws IOException
     {
         initAutomaton();
         this.symbolsTable = new ArrayList<>();
+        this.errorStack = new Stack<>();
+        this.tag = new Tag();
     }
 
     private void initAutomaton() throws IOException
@@ -36,39 +48,69 @@ public class Syntactic
         pda = new PushDownAutomaton(info, rules);
     }
 
-    public boolean validString(LinkedList<Token> tokens) throws NullPointerException
+    public boolean validString(LinkedList<Token> tokens) throws NullPointerException, IOException
     {
-        for (int i = 0; i < tokens.size(); i++)
+        if (tokens != null)
+        {
+            initAutomaton();
+            for (int i = 0; i < tokens.size(); i++)
+                try
+                {
+                    if (i != 0)
+                        this.previous = String.valueOf(tokens.get(i - 1).getTag());
+                    else
+                        this.previous = String.valueOf(tokens.get(i).getTag());
+
+                    String current = String.valueOf(tokens.get(i).getTag());
+                    String lookahead = i + 2 > tokens.size() ? "" : String.valueOf(tokens.get(i + 1).getTag());
+                    if (tokens.get(i).getTag() == -1) // Lambda
+                        current = tokens.get(i).getLexeme();
+                    if ((i + 2) <= tokens.size() && tokens.get(i + 1).getTag() == -1) // Lambda
+                        lookahead = tokens.get(i).getLexeme();
+
+                    pda.getNextState(current, lookahead);
+
+                    if (current.equals("224"))
+                        addSymbolToTable(tokens, i);
+                }
+                catch (NullPointerException e)
+                {
+                    // Error
+                    this.errorStack.push(new Error(200, tokens.get(i).getLine(), this.tag.get(tokens.get(i).getTag())));
+                    tokens = holub(tokens);
+                    return validString(tokens);
+                }
             try
             {
-                if (i != 0)
-                    this.previous = String.valueOf(tokens.get(i - 1).getTag());
-                else
-                    this.previous = String.valueOf(tokens.get(i).getTag());
-
-                String current = String.valueOf(tokens.get(i).getTag());
-                String lookahead = i + 2 > tokens.size() ? "" : String.valueOf(tokens.get(i + 1).getTag());
-                if (tokens.get(i).getTag() == -1) // Lambda
-                    current = tokens.get(i).getLexeme();
-                if ((i + 2) <= tokens.size() && tokens.get(i + 1).getTag() == -1) // Lambda
-                    lookahead = tokens.get(i).getLexeme();
-
-
-                if (current.equals("224"))
-                    addSymbolToTable(tokens, i);
-
-                pda.getNextState(current, lookahead);
+                pda.getNextState("", "");
             }
-            catch (NullPointerException e)
+            catch (Exception e)
             {
-                // Error
-                pda.possibleValues(previous);
-                throw new NullPointerException();
+                return false;
             }
-        pda.getNextState("", "");
+            System.out.printf("State: %s\n", this.pda.getState());
+            return pda.isInValidState();
+        }
+        return false;
+    }
 
-        System.out.println(pda.getState());
-        return pda.isInValidState();
+    private LinkedList<Token> holub(LinkedList<Token> tokens)
+    {
+        int i = 0;
+        while (tokens.size() > 0)
+        {
+            try
+            {
+                this.pda.getNextState(String.valueOf(tokens.get(i).getTag()), String.valueOf(tokens.get(i + 1).getTag()));
+                i++;
+                return tokens;
+            }
+            catch (Exception ignored)
+            {
+            }
+            tokens.remove(i);
+        }
+        return null;
     }
 
     private void addSymbolToTable(LinkedList<Token> tokens, int i)
@@ -97,6 +139,7 @@ public class Syntactic
                     {
                         symbol = aSymbolsTable;
                         symbol.addLine(tokens.get(i).getLine());
+                        symbol.setValue(tokens.get(i + 2).getLexeme());
                     }
             }
             else
@@ -129,5 +172,28 @@ public class Syntactic
     public List<Symbol> getSymbolsTable()
     {
         return symbolsTable;
+    }
+
+    public Stack<Error> getErrorStack()
+    {
+        return errorStack;
+    }
+
+    private String getAlphaNumericString()
+    {
+
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                + "0123456789"
+                + "abcdefghijklmnopqrstuvxyz";
+
+        StringBuilder sb = new StringBuilder(10);
+
+        for (int i = 0; i < 10; i++)
+        {
+            int index = (int) (AlphaNumericString.length() * Math.random());
+            sb.append(AlphaNumericString.charAt(index));
+        }
+
+        return sb.toString();
     }
 }

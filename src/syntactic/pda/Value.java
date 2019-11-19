@@ -13,12 +13,12 @@ public class Value
         this.stack = stack;
     }
 
-    int getState()
+    public int getState()
     {
         return state;
     }
 
-    String[] getStack()
+    public String[] getStack()
     {
         return stack;
     }

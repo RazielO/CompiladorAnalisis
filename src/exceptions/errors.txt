@@ -1,2 +1,2 @@
 100, Unknown token
-200, Expected token
+200, Unexpected token
