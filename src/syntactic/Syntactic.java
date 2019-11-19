@@ -4,9 +4,7 @@ import exceptions.Error;
 import files.FileReader;
 import lexer.Tag;
 import lexer.Token;
-import syntactic.pda.Key;
 import syntactic.pda.PushDownAutomaton;
-import syntactic.pda.Value;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -77,7 +75,7 @@ public class Syntactic
                 {
                     // Error
                     this.errorStack.push(new Error(200, tokens.get(i).getLine(), this.tag.get(tokens.get(i).getTag())));
-                    tokens = holub(tokens);
+                    tokens = panicMode(tokens);
                     return validString(tokens);
                 }
             try
@@ -88,13 +86,12 @@ public class Syntactic
             {
                 return false;
             }
-            System.out.printf("State: %s\n", this.pda.getState());
             return pda.isInValidState();
         }
         return false;
     }
 
-    private LinkedList<Token> holub(LinkedList<Token> tokens)
+    private LinkedList<Token> panicMode(LinkedList<Token> tokens)
     {
         int i = 0;
         while (tokens.size() > 0)
