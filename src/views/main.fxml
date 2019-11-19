@@ -14,9 +14,11 @@
                 <MenuItem fx:id="fileSave" text="Save   Ctrl+S"/>
             </Menu>
             <Menu text="Info">
+                <MenuItem fx:id="infoGrammar" text="Grammar"/>
                 <MenuItem fx:id="infoLexical" text="Lexical"/>
                 <MenuItem fx:id="infoSyntactic" text="Syntactic"/>
                 <MenuItem fx:id="infoSemantic" text="Semantic"/>
+                <MenuItem fx:id="infoGeneral" text="General"/>
             </Menu>
         </MenuBar>
         <HBox>

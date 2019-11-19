@@ -6,7 +6,10 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,8 +21,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import javafx.stage.Screen;
+import javafx.stage.*;
 import lexer.Lexer;
 import main.Main;
 import org.fxmisc.flowless.VirtualizedScrollPane;
@@ -67,7 +69,7 @@ public class MainController
     @FXML
     TableColumn colId, colLine, colType, colValue;
     @FXML
-    MenuItem fileOpen, fileSave, infoLexical, infoSyntactic, infoSemantic;
+    MenuItem fileOpen, fileSave, infoLexical, infoSyntactic, infoSemantic, infoGrammar, infoGeneral;
 
     private String filename;
 
@@ -201,14 +203,17 @@ public class MainController
             btnSemantic.setDisable(true);
             saveFile();
         });
-        infoLexical.setOnAction(e -> openPdf("Lexer.pdf"));
-        infoSyntactic.setOnAction(e -> openPdf("Syntactic.pdf"));
+        infoLexical.setOnAction(e -> openAnalysisInfo("lexico"));
+        infoSyntactic.setOnAction(e -> openAnalysisInfo("sintactico"));
+        infoGrammar.setOnAction(e -> openAnalysisInfo("grammar"));
+        infoGeneral.setOnAction(e -> openAnalysisInfo("general"));
     }
 
     private void configureCodeArea(double maxWidth, double maxHeight)
     {
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
-        codeArea.setOnKeyTyped(e -> {
+        codeArea.setOnKeyTyped(e ->
+        {
             btnSemantic.setDisable(true);
             btnSyntactic.setDisable(true);
         });
@@ -374,5 +379,27 @@ public class MainController
         }
         spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
         return spansBuilder.create();
+    }
+
+    private void openAnalysisInfo(String analysis)
+    {
+        AnalysisInfoController.analysis = analysis;
+        try
+        {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("views/analysisInfo.fxml")));
+            Stage stage = new Stage();
+            Scene scene = new Scene(root, 1920, 1080);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getClassLoader().getResource("controllers/keywords.css")).toExternalForm());
+
+            stage.setTitle(analysis.toUpperCase());
+            stage.setScene(scene);
+            stage.setMaximized(true);
+            stage.setResizable(false);
+            stage.show();
+        }
+        catch (IOException e1)
+        {
+            e1.printStackTrace();
+        }
     }
 }

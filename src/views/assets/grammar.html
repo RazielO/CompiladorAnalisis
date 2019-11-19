@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>BNF</h1>
+<pre>
+        <code>
+&lt;programa&gt; ::= { declare &lt;decls&gt; begin &lt;instrs&gt; }
+&lt;decls&gt;    ::= &lt;decl&gt; &lt;decls&gt;
+             | ε
+&lt;decl&gt;     ::= &lt;tipo&gt; &lt;id&gt;;
+&lt;tipo&gt;     ::= int
+             | float
+             | boolean
+             | char
+&lt;insts&gt;    ::= &lt;inst&gt; &lt;insts&gt;
+&lt;inst&gt;     ::= print(&lt;id&gt;);
+             | read(&lt;id&gt;);
+             | if (&lt;bool&gt;) { &lt;insts&gt; }
+             | if (&lt;bool&gt;) { &lt;insts&gt; } else { &lt;insts&gt; }
+             | while (&lt;bool&gt;) { &lt;insts&gt; }
+             | do { &lt;insts&gt; } while (&lt;bool&gt;);
+             | break;
+             | &lt;asig&gt;
+&lt;asig&gt;     ::= &lt;id&gt; = &lt;expr&gt;;
+&lt;bool&gt;     ::= &lt;bool&gt; or &lt;comb&gt;
+             | &lt;comb&gt;
+&lt;comb&gt;     ::= &lt;comb&gt; and &lt;comp&gt;
+             | &lt;comp&gt;
+&lt;comp&gt;     ::= &lt;expr&gt; &lt;oprel&gt; &lt;expr&gt;
+             | &lt;expr&gt;
+&lt;oprel&gt;    ::= &lt;
+             | &gt;
+             | &lt;=
+             | &gt;=
+             | !=
+             | ==
+&lt;expr&gt;     ::= &lt;expr&gt; + &lt;term&gt;
+             | &lt;expr&gt; - &lt;term&gt;
+             | &lt;term&gt;
+&lt;term&gt;     ::= &lt;term&gt; * &lt;val&gt;
+             | &lt;term&gt; / &lt;val&gt;
+             | &lt;val&gt;
+&lt;val&gt;      ::= &lt;num&gt;
+             | &lt;real&gt;
+             | true
+             | false
+             | &lt;cadena&gt;
+&lt;num&gt;      ::= [0-9]+
+&lt;real&gt;     ::= [0-9]+.[0-9]+
+&lt;cadena&gt;   ::= "[a-zA-Z0-9.,-_]*"
+&lt;id&gt;       ::= [a-z]([a-zA-Z0-9])*
+        </code>
+    </pre>
+</body>
+</html>
