@@ -179,4 +179,38 @@ Para la implementación del analizador léxico, se hizo uso de autómatas, 6 en 
 
 ## Análisis sintáctico
 
+### Autómata
+
+Se hace uso de un autómata de pila, que debido a la longitud de su definición, no se incluye en el presente archivo
+
+### Diagramas de clases
+
+#### Clase Control
+
+![control](assets/syntactic/Control.png)
+
+#### Clase Key
+
+![key](assets/syntactic/Key.png)
+
+#### Clase PushDownAutomaton
+
+![control](assets/syntactic/PushDownAutomaton.png)
+
+#### Clase Rules
+
+![control](assets/syntactic/Rules.png)
+
+#### Clase Symbol
+
+![control](assets/syntactic/Symbol.png)
+
+#### Clase Syntactic
+
+![control](assets/syntactic/Syntactic.png)
+
+#### Clase Control
+
+![control](assets/syntactic/Value.png)
+
 ## Análisis semántico
