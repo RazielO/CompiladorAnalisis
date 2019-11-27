@@ -2,3 +2,4 @@
 200, Unexpected token
 301, Undefined ID
 302, Multiple declarations
+303, Incompatible types
