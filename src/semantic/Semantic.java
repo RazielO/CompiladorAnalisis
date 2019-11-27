@@ -5,6 +5,7 @@ import lexer.Tag;
 import lexer.Token;
 import syntactic.Symbol;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -27,10 +28,11 @@ public class Semantic
 
     public void checkSemantics()
     {
-        checkUndefinedIDs();
+        checkForUndefinedIDs();
+        checkForMultipleDeclarations();
     }
 
-    private void checkUndefinedIDs()
+    private void checkForUndefinedIDs()
     {
         boolean startChecking = false;
         for (Token token : this.tokensList)
@@ -40,6 +42,25 @@ public class Semantic
             if (startChecking)
                 if (this.tag.get(token.getTag()).equals("ID") && !isDefined(token.getLexeme()))
                     this.errorStack.push(new Error(301, token.getLine(), token.getLexeme()));
+        }
+    }
+
+    private void checkForMultipleDeclarations()
+    {
+        boolean startChecking = false;
+        List<String> seen = new ArrayList<>();
+        for (Token token : this.tokensList)
+        {
+            if (this.tag.get(token.getTag()).equals("DECLARE"))
+                startChecking = true;
+            else if (this.tag.get(token.getTag()).equals("BEGIN"))
+                break;
+
+            if (startChecking)
+                if (this.tag.get(token.getTag()).equals("ID") && seen.contains(token.getLexeme()))
+                    this.errorStack.push(new Error(302, token.getLine(), token.getLexeme()));
+                else
+                    seen.add(token.getLexeme());
         }
     }
 
