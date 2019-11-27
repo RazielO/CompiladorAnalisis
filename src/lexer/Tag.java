@@ -17,6 +17,7 @@ public class Tag
     {
         this.tags = new Hashtable<>();
 
+        this.tags.put(-1, "LAMBDA");
         this.tags.put(200, "DECLARE");
         this.tags.put(201, "BEGIN");
         this.tags.put(203, "PRINT");

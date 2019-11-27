@@ -11,17 +11,14 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 import lexer.Lexer;
 import main.Main;
 import org.fxmisc.flowless.VirtualizedScrollPane;
@@ -32,17 +29,16 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.fxmisc.wellbehaved.event.EventPattern;
 import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
+import semantic.Semantic;
 import syntactic.Symbol;
 import syntactic.Syntactic;
 
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -158,6 +154,41 @@ public class MainController
                 result.append(syntacticResult);
                 result.append("\n\n").append("ERRORS:").append("\n");
                 for (String error : errors)
+                    result.append("  ").append(error).append("\n");
+
+                txtErrors.setText(result.toString());
+                fillTable(syntactic.getSymbolsTable());
+                Lexer.line = 1;
+            }
+            catch (IOException e1)
+            {
+                e1.printStackTrace();
+            }
+        });
+
+        btnSemantic.setOnMouseClicked(e ->
+        {
+            try
+            {
+                Lexer lexer = new Lexer(getCode());
+                lexer.getResult();
+                Syntactic syntactic = new Syntactic();
+                LinkedList<lexer.Token> tokens = lexer.getSymbols();
+                tokens.add(0, new lexer.Token(-1, "lambda", "λ", 0));
+
+                syntactic.validString(tokens);
+
+                Semantic semantic = new Semantic(tokens, syntactic.getSymbolsTable());
+                semantic.checkSemantics();
+                Stack<Error> errors = semantic.getErrorStack();
+                PrintErrors printErrors = new PrintErrors();
+                printErrors.setErrors(errors);
+                boolean semanticResult = errors.size() == 0;
+
+                StringBuilder result = new StringBuilder();
+                result.append(semanticResult);
+                result.append("\n\n").append("ERRORS:").append("\n");
+                for (String error : printErrors.showErrors())
                     result.append("  ").append(error).append("\n");
 
                 txtErrors.setText(result.toString());
@@ -314,20 +345,6 @@ public class MainController
         }
         catch (NullPointerException ignored)
         {
-        }
-    }
-
-    private void openPdf(String name)
-    {
-        try
-        {
-            String path = System.getProperty("user.dir") + "/assets/" + name;
-            if (Desktop.isDesktopSupported())
-                Desktop.getDesktop().open(new File(path));
-        }
-        catch (IOException e)
-        {
-            alertMessage(e.getMessage(), "Error", Alert.AlertType.ERROR, "There was a problem");
         }
     }
 
