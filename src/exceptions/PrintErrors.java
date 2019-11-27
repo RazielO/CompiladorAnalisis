@@ -103,6 +103,8 @@ public class PrintErrors
             return "lexical";
         else if (errorCode >= 200 && errorCode < 300)
             return "syntactical";
+        else if (errorCode >= 300 && errorCode < 400)
+            return "semantic";
         else
             return "unknown";
     }
