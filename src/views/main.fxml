@@ -29,7 +29,7 @@
         </HBox>
 
         <HBox>
-            <Button fx:id="btnStart">Start</Button>
+            <Button fx:id="btnStart">Compile</Button>
             <Button fx:id="btnLexical">Lexical</Button>
             <Button fx:id="btnSyntactic" disable="true">Syntactic</Button>
             <Button fx:id="btnSemantic" disable="true">Semantic</Button>

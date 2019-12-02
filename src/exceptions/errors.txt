@@ -3,3 +3,6 @@
 301, Undefined ID
 302, Multiple declarations
 303, Incompatible types
+304, Division by zero
+305, Invalid operation
+306, Variable not initialized

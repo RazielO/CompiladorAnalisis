@@ -34,8 +34,8 @@ public class Tag
         this.tags.put(214, "GE");
         this.tags.put(215, "EQ");
         this.tags.put(216, "NE");
-        this.tags.put(217, "TRUE");
-        this.tags.put(218, "FALSE");
+        this.tags.put(217, "BOOLEAN_VAL");
+//        this.tags.put(218, "FALSE");
         this.tags.put(219, "BREAK");
         this.tags.put(220, "INT_TYPE");
         this.tags.put(221, "FLOAT_TYPE");

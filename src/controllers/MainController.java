@@ -117,7 +117,19 @@ public class MainController
 
                 PrintErrors printErrors = new PrintErrors(lexer.getErrorStack());
                 List<String> lexicalErrors = printErrors.showErrors();
-                btnSyntactic.setDisable(lexicalErrors.size() != 0);
+
+                boolean correct = lexicalErrors.size() == 0;
+
+                if (!correct)
+                {
+                    btnLexical.setStyle("-fx-background-color: #ee5253;");
+                    btnSyntactic.setDisable(true);
+                }
+                else
+                {
+                    btnSyntactic.setDisable(false);
+                    btnLexical.setStyle("-fx-background-color: #10ac84;");
+                }
                 btnSemantic.setDisable(true);
 
                 result.append("\n\n").append("ERRORS:").append("\n");
@@ -148,7 +160,18 @@ public class MainController
 
                 PrintErrors printErrors = new PrintErrors(syntacticErrors);
                 List<String> errors = printErrors.showErrors();
-                btnSemantic.setDisable(syntacticErrors.size() != 0);
+
+                boolean correct = syntacticErrors.size() != 0;
+                if (!syntacticResult)
+                {
+                    btnSyntactic.setStyle("-fx-background-color: #ee5253;");
+                    btnSemantic.setDisable(true);
+                }
+                else
+                {
+                    btnSemantic.setDisable(false);
+                    btnSyntactic.setStyle("-fx-background-color: #10ac84;");
+                }
 
                 StringBuilder result = new StringBuilder();
                 result.append(syntacticResult);
@@ -185,6 +208,11 @@ public class MainController
                 printErrors.setErrors(errors);
                 boolean semanticResult = errors.size() == 0;
 
+                if (!semanticResult)
+                    btnSemantic.setStyle("-fx-background-color: #ee5253;");
+                else
+                    btnSemantic.setStyle("-fx-background-color: #10ac84;");
+
                 StringBuilder result = new StringBuilder();
                 result.append(semanticResult);
                 result.append("\n\n").append("ERRORS:").append("\n");
@@ -200,6 +228,54 @@ public class MainController
                 e1.printStackTrace();
             }
         });
+
+        btnStart.setOnMouseClicked(e ->
+        {
+            try
+            {
+                Lexer lexer = new Lexer(getCode());
+                lexer.getResult();
+                Syntactic syntactic = new Syntactic();
+                LinkedList<lexer.Token> tokens = lexer.getSymbols();
+                tokens.add(0, new lexer.Token(-1, "lambda", "λ", 0));
+
+                Stack<Error> errors = lexer.getErrorStack();
+
+                syntactic.validString(tokens);
+                errors.addAll(syntactic.getErrorStack());
+
+                Semantic semantic = new Semantic(tokens, syntactic.getSymbolsTable());
+                semantic.checkSemantics();
+                errors.addAll(semantic.getErrorStack());
+                PrintErrors printErrors = new PrintErrors();
+                printErrors.setErrors(errors);
+                boolean result = errors.size() == 0;
+
+                if (result)
+                    btnStart.setStyle("-fx-background-color: #10ac84;");
+                else
+                    btnStart.setStyle("-fx-background-color: #ee5253;");
+
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(stringBuilder);
+                stringBuilder.append("\n\n").append("ERRORS:").append("\n");
+                for (String error : printErrors.showErrors())
+                    stringBuilder.append("  ").append(error).append("\n");
+
+                txtErrors.setText(stringBuilder.toString());
+                fillTable(syntactic.getSymbolsTable());
+                Lexer.line = 1;
+            }
+            catch (IOException e1)
+            {
+                e1.printStackTrace();
+            }
+        });
+
+        btnStart.setStyle("-fx-background-color: #ff9f43;");
+        btnLexical.setStyle("-fx-background-color: #ff9f43;");
+        btnSemantic.setStyle("-fx-background-color: #ff9f43;");
+        btnSyntactic.setStyle("-fx-background-color: #ff9f43;");
     }
 
     private void configureMainContainer(double maxWidth, double maxHeight)
@@ -243,11 +319,9 @@ public class MainController
     private void configureCodeArea(double maxWidth, double maxHeight)
     {
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
-        codeArea.setOnKeyTyped(e ->
-        {
-            btnSemantic.setDisable(true);
-            btnSyntactic.setDisable(true);
-        });
+        codeArea.setOnKeyTyped(e -> modifyButtonsOnCodeAreaKey());
+
+        codeArea.setOnKeyPressed(e -> modifyButtonsOnCodeAreaKey());
 
         codeScrollPane.setPrefWidth((maxWidth / 2) - (maxWidth * 0.05));
         codeScrollPane.setPrefHeight(maxHeight * 0.65);
@@ -274,6 +348,16 @@ public class MainController
                 if (m0.find()) Platform.runLater(() -> codeArea.insertText(caretPosition, m0.group()));
             }
         });
+    }
+
+    private void modifyButtonsOnCodeAreaKey()
+    {
+        btnSemantic.setDisable(true);
+        btnSyntactic.setDisable(true);
+        btnStart.setStyle("-fx-background-color: #ff9f43;");
+        btnLexical.setStyle("-fx-background-color: #ff9f43;");
+        btnSemantic.setStyle("-fx-background-color: #ff9f43;");
+        btnSyntactic.setStyle("-fx-background-color: #ff9f43;");
     }
 
     private void setCode(String code)
