@@ -47,17 +47,10 @@ public class PrintErrors
         fileReader.setFilename(ERRORS_FILE);
 
         errorCodes = new Hashtable<>();
-        try
+        for (String line : fileReader.read().split("\n"))
         {
-            for (String line : fileReader.read().split("\n"))
-            {
-                String[] aux = line.split(",");
-                errorCodes.put(Integer.parseInt(aux[0].trim()), aux[1].trim());
-            }
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
+            String[] aux = line.split(",");
+            errorCodes.put(Integer.parseInt(aux[0].trim()), aux[1].trim());
         }
     }
 

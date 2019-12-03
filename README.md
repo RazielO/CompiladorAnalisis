@@ -76,25 +76,33 @@
 
 ## Análisis léxico
 
-### Resultado
+### Casos de uso
 
-En un código simple, como el siguiente:
+#### Uso de cualquier simbolo que no se encuentre dentro del alfabeto
 
 ```
 {
-// Comentario
-declare
-    int X;
-begin
-    x = 10;
-    fizz = "Fizz";
-	print(fizz);
+    declare
+        int país;  // Error el caracter 'í' no se encuentra dentro del alfabeto
+    begin
+        país = 10; // Error el caracter 'í' no se encuentra dentro del alfabeto
 }
 ```
 
-El resultado es:
+#### Uso de cualquier simbolo que no cumpla con la siguiente expresión regular dentro de una cadena [a-zA-Z0-9.,-_]*
 
-![result](assets/lexer/result.png)
+En teoría, una cadena debería de permitir cualquier símbolo, sin embargo, al estar haciendo uso de autómatas 
+finitos deterministas, es inviable crear 1,112,064 de reglas para cumplir con toda la tabla de 
+[UTF-8](https://en.wikipedia.org/wiki/UTF-8)
+
+```c
+{
+    declare
+        char raro;
+    begin
+        raro = "El item vale $10.00"; // Error el caracter '$' no se puede colocar dentro de una cadena
+}
+```
 
 
 ### Autómatas
@@ -179,6 +187,62 @@ Para la implementación del analizador léxico, se hizo uso de autómatas, 6 en 
 
 ## Análisis sintáctico
 
+### Casos de uso
+
+#### Palabra reservada mal escrita
+
+```
+{
+    declar // Error. Palabra reservada mal escrita
+    begin
+}
+```
+
+#### Palabra reservada en un lugar indebido
+
+```
+{
+    declare
+        int read; // Error. Palabra reservada usada en una mala posicion (como id)
+    begin
+}
+```
+
+#### Falta de paréntesis de cierre
+
+```
+{
+    declare
+    begin
+        if (x == 1) // Error. Falta parentesis de cierre
+        {
+        }
+}
+```
+
+#### Falta, exceso o mal uso de delimitadores
+
+```
+{
+    declare
+    begin
+        print;(x); // Exceso de delimitadores
+        read x; // Falta de delimitadores
+        print()x; // Delimitadores mal ubicados
+}
+} // Doble llave (exceso de delimitadores)
+```
+
+#### Falta de operandos
+
+```
+{
+    declare
+    begin
+        x = ; // Error. Falta de operandos
+}
+```
+
 ### Autómata
 
 Se hace uso de un autómata de pila, que debido a la longitud de su definición, no se incluye en el presente archivo
@@ -214,3 +278,58 @@ Se hace uso de un autómata de pila, que debido a la longitud de su definición,
 ![control](assets/syntactic/Value.png)
 
 ## Análisis semántico
+
+### Casos de uso
+
+#### Uso de un ID no declarado
+
+```
+{
+    declare
+    begin
+        x = 10; // ID no declarado
+}
+```
+
+#### Multiples declaraciones
+
+```
+{
+    declare
+        int x;
+        float x; // Multiples declaraciones de 'x'
+    begin
+}
+```
+
+#### División entre cero
+
+```
+{
+    declare
+        int x;
+        int y;
+        float z;
+    begin
+        z = 10.0 / 0.0; // Division entre la constante cero
+        x = 0;
+        y = 50 / x; // Division entre un ID cuyo valor es cero
+}
+```
+
+#### Incompatibilidad de tipos
+
+```
+{
+    declare
+        int y;
+        float z;
+    begin
+        z = 10.0 / 50; // Incompatibilidad entre int y float
+        y = 50 * true; // Incompatibilidad entre int y boolean
+}
+```
+
+### Clase Semantic
+
+![semantic](assets/semantic/Semantic.png)

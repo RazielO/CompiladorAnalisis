@@ -172,7 +172,7 @@ public class Semantic
                     if (symbol != null)
                     {
                         String result = resultOfExpression(i + 1);
-                        if (!symbol.getType().toUpperCase().equals(result))
+                        if (isDefined(symbol.getId()) && !symbol.getType().toUpperCase().equals(result))
                             this.errorStack.push(new Error(303, this.tokensList.get(i).getLine(), String.format("%s and %s", result, symbol.getType().toUpperCase())));
                     }
                     break;
