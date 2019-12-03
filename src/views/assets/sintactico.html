@@ -4,40 +4,92 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<h1>Análisis sintáctico</h1>
+<h1 id="anlisissintctico">Análisis sintáctico</h1>
 
-<h2>Autómata</h2>
+<h2 id="casosdeuso">Casos de uso</h2>
 
-<p>Se hace uso de un autómata de pila, que debido a la longitud de su definición, no se incluye en el presente archivo</p>
+<h3 id="palabrareservadamalescrita">Palabra reservada mal escrita</h3>
 
-<h2>Diagramas de clases</h2>
+<pre><code>{
+    declar // Error. Palabra reservada mal escrita
+    begin
+}
+</code></pre>
 
-<h3>Clase Control</h3>
+<h3 id="palabrareservadaenunlugarindebido">Palabra reservada en un lugar indebido</h3>
 
-<p><img src="syntactic/Control.png" alt="control"></p>
+<pre><code>{
+    declare
+        int read; // Error. Palabra reservada usada en una mala posicion (como id)
+    begin
+}
+</code></pre>
 
-<h3>Clase Key</h3>
+<h3 id="faltadeparntesisdecierre">Falta de paréntesis de cierre</h3>
 
-<p><img src="syntactic/Key.png" alt="key"></p>
+<pre><code>{
+    declare
+    begin
+        if (x == 1) // Error. Falta parentesis de cierre
+        {
+        }
+}
+</code></pre>
 
-<h3>Clase PushDownAutomaton</h3>
+<h3 id="faltaexcesoomalusodedelimitadores">Falta, exceso o mal uso de delimitadores</h3>
 
-<p><img src="syntactic/PushDownAutomaton.png" alt="control"></p>
+<pre><code>{
+    declare
+    begin
+        print;(x); // Exceso de delimitadores
+        read x; // Falta de delimitadores
+        print()x; // Delimitadores mal ubicados
+}
+} // Doble llave (exceso de delimitadores)
+</code></pre>
 
-<h3>Clase Rules</h3>
+<h3 id="faltadeoperandos">Falta de operandos</h3>
 
-<p><img src="syntactic/Rules.png" alt="control"></p>
+<pre><code>{
+    declare
+    begin
+        x = ; // Error. Falta de operandos
+}
+</code></pre>
 
-<h3>Clase Symbol</h3>
+<h2 id="autmata">Autómata</h2>
 
-<p><img src="syntactic/Symbol.png" alt="control"></p>
+<p>Se hace uso de un autómata de pila, que debido a la longitud de su definición, no se incluye en el presente
+    archivo</p>
 
-<h3>Clase Syntactic</h3>
+<h2 id="diagramasdeclases">Diagramas de clases</h2>
 
-<p><img src="syntactic/Syntactic.png" alt="control"></p>
+<h3 id="clasecontrol">Clase Control</h3>
 
-<h3>Clase Control</h3>
+<p><img src="assets/syntactic/Control.png" alt="control"/></p>
 
-<p><img src="syntactic/Value.png" alt="control"></p>
+<h3 id="clasekey">Clase Key</h3>
+
+<p><img src="assets/syntactic/Key.png" alt="key"/></p>
+
+<h3 id="clasepushdownautomaton">Clase PushDownAutomaton</h3>
+
+<p><img src="assets/syntactic/PushDownAutomaton.png" alt="control"/></p>
+
+<h3 id="claserules">Clase Rules</h3>
+
+<p><img src="assets/syntactic/Rules.png" alt="control"/></p>
+
+<h3 id="clasesymbol">Clase Symbol</h3>
+
+<p><img src="assets/syntactic/Symbol.png" alt="control"/></p>
+
+<h3 id="clasesyntactic">Clase Syntactic</h3>
+
+<p><img src="assets/syntactic/Syntactic.png" alt="control"/></p>
+
+<h3 id="clasecontrol-1">Clase Control</h3>
+
+<p><img src="assets/syntactic/Value.png" alt="control"/></p>
 </body>
 </html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 id="anlisissemntico">Análisis semántico</h1>
+
+<h2 id="casosdeuso">Casos de uso</h2>
+
+<h3 id="usodeunidnodeclarado">Uso de un ID no declarado</h3>
+
+<pre><code>{
+    declare
+    begin
+        x = 10; // ID no declarado
+}
+</code></pre>
+
+<h3 id="multiplesdeclaraciones">Multiples declaraciones</h3>
+
+<pre><code>{
+    declare
+        int x;
+        float x; // Multiples declaraciones de 'x'
+    begin
+}
+</code></pre>
+
+<h3 id="divisinentrecero">División entre cero</h3>
+
+<pre><code>{
+    declare
+        int x;
+        int y;
+        float z;
+    begin
+        z = 10.0 / 0.0; // Division entre la constante cero
+        x = 0;
+        y = 50 / x; // Division entre un ID cuyo valor es cero
+}
+</code></pre>
+
+<h3 id="incompatibilidaddetipos">Incompatibilidad de tipos</h3>
+
+<pre><code>{
+    declare
+        int y;
+        float z;
+    begin
+        z = 10.0 / 50; // Incompatibilidad entre int y float
+        y = 50 * true; // Incompatibilidad entre int y boolean
+}
+</code></pre>
+
+<h2 id="clasesemantic">Clase Semantic</h2>
+
+<p><img src="assets/semantic/Semantic.png" alt="semantic"/></p>
+</body>
+</html>

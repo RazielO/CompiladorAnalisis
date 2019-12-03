@@ -313,6 +313,7 @@ public class MainController
         infoLexical.setOnAction(e -> openAnalysisInfo("lexico"));
         infoSyntactic.setOnAction(e -> openAnalysisInfo("sintactico"));
         infoGrammar.setOnAction(e -> openAnalysisInfo("grammar"));
+        infoSemantic.setOnAction(e -> openAnalysisInfo("semantico"));
         infoGeneral.setOnAction(e -> openAnalysisInfo("general"));
     }
 

@@ -5,95 +5,104 @@
     <title>Title</title>
 </head>
 <body>
-<h1 id="anlisislxico">Analisis lexico</h1>
+<h1 id="anlisislxico">Análisis léxico</h1>
 
-<h2 id="resultado">Resultado</h2>
+<h2 id="casosdeuso">Casos de uso</h2>
 
-<p>En un codigo simple, como el siguiente:</p>
+<h3 id="usodecualquiersimboloquenoseencuentredentrodelalfabeto">Uso de cualquier simbolo que no se encuentre dentro del
+    alfabeto</h3>
 
 <pre><code>{
-// Comentario
-declare
-    int X;
-begin
-    x = 10;
-    fizz = "Fizz";
-    print(fizz);
+    declare
+        int país;  // Error el caracter 'í' no se encuentra dentro del alfabeto
+    begin
+        país = 10; // Error el caracter 'í' no se encuentra dentro del alfabeto
 }
 </code></pre>
 
-<p>El resultado es:</p>
+<h3 id="usodecualquiersimboloquenocumplaconlasiguienteexpresinregulardentrodeunacadenaazaz09_">Uso de cualquier simbolo
+    que no cumpla con la siguiente expresión regular dentro de una cadena [a-zA-Z0-9.,-_]*</h3>
 
-<p><img src="lexer/result.png" alt="result"/></p>
+<p>En teoría, una cadena debería de permitir cualquier símbolo, sin embargo, al estar haciendo uso de autómatas
+    finitos deterministas, es inviable crear 1,112,064 de reglas para cumplir con toda la tabla de
+    <a href="https://en.wikipedia.org/wiki/UTF-8">UTF-8</a></p>
 
-<h2 id="autmatas">Automatas</h2>
+<pre><code class="c language-c">{
+    declare
+        char raro;
+    begin
+        raro = "El item vale $10.00"; // Error el caracter '$' no se puede colocar dentro de una cadena
+}
+</code></pre>
 
-<p>Para la implementacion del analizador lexico, se hizo uso de automatas, 6 en total, estos identifican:</p>
+<h2 id="autmatas">Autómatas</h2>
+
+<p>Para la implementación del analizador léxico, se hizo uso de autómatas, 6 en total, estos identifican:</p>
 
 <h3 id="id">ID</h3>
 
-<p><img src="lexer/id.png" alt="id"/></p>
+<p><img src="assets/lexer/id.png" alt="id"/></p>
 
-<h3 id="nmeros">Numeros</h3>
+<h3 id="nmeros">Números</h3>
 
-<p><img src="lexer/number.png" alt="number"/></p>
+<p><img src="assets/lexer/number.png" alt="number"/></p>
 
 <h3 id="operadoresrelacionales">Operadores relacionales</h3>
 
-<p><img src="lexer/oprel.png" alt="oprel"/></p>
+<p><img src="assets/lexer/oprel.png" alt="oprel"/></p>
 
 <h3 id="palabrasreservadas">Palabras reservadas</h3>
 
-<p><img src="lexer/reserved.png" alt="reserved"/></p>
+<p><img src="assets/lexer/reserved.png" alt="reserved"/></p>
 
 <h3 id="cadenas">Cadenas</h3>
 
-<p><img src="lexer/string.png" alt="string"/></p>
+<p><img src="assets/lexer/string.png" alt="string"/></p>
 
-<h3 id="smbolosdeuncarcter">Simbolos de un caracter</h3>
+<h3 id="smbolosdeuncarcter">Símbolos de un carácter</h3>
 
-<p><img src="lexer/unary.png" alt="unary"/></p>
+<p><img src="assets/lexer/unary.png" alt="unary"/></p>
 
 <h2 id="diagramasdeclases">Diagramas de clases</h2>
 
 <h3 id="claseautomaton">Clase Automaton</h3>
 
-<p><img src="lexer/uml/Automaton.png" alt="automaton"/></p>
+<p><img src="assets/lexer/uml/Automaton.png" alt="automaton"/></p>
 
 <h3 id="clasecontrol">Clase Control</h3>
 
-<p><img src="lexer/uml/Control.png" alt="control"/></p>
+<p><img src="assets/lexer/uml/Control.png" alt="control"/></p>
 
 <h3 id="claseerror">Clase Error</h3>
 
-<p><img src="lexer/uml/Error.png" alt="error"/></p>
+<p><img src="assets/lexer/uml/Error.png" alt="error"/></p>
 
 <h3 id="clasefilereader">Clase FileReader</h3>
 
-<p><img src="lexer/uml/FileReader.png" alt="filereader"/></p>
+<p><img src="assets/lexer/uml/FileReader.png" alt="filereader"/></p>
 
 <h3 id="clasekeypair">Clase KeyPair</h3>
 
-<p><img src="lexer/uml/KeyPair.png" alt="keypair"/></p>
+<p><img src="assets/lexer/uml/KeyPair.png" alt="keypair"/></p>
 
 <h3 id="claselexer">Clase Lexer</h3>
 
-<p><img src="lexer/uml/Lexer.png" alt="lexer"/></p>
+<p><img src="assets/lexer/uml/Lexer.png" alt="lexer"/></p>
 
 <h3 id="claseprinterrors">Clase PrintErrors</h3>
 
-<p><img src="lexer/uml/PrintErrors.png" alt="printerrors"/></p>
+<p><img src="assets/lexer/uml/PrintErrors.png" alt="printerrors"/></p>
 
 <h3 id="claserules">Clase Rules</h3>
 
-<p><img src="lexer/uml/Rules.png" alt="rules"/></p>
+<p><img src="assets/lexer/uml/Rules.png" alt="rules"/></p>
 
 <h3 id="clasetag">Clase Tag</h3>
 
-<p><img src="lexer/uml/Tag.png" alt="tag"/></p>
+<p><img src="assets/lexer/uml/Tag.png" alt="tag"/></p>
 
 <h3 id="clasetoken">Clase Token</h3>
 
-<p><img src="lexer/uml/Token.png" alt="token"/></p>
+<p><img src="assets/lexer/uml/Token.png" alt="token"/></p>
 </body>
 </html>
