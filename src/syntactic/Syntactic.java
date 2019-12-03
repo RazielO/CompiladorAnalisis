@@ -75,7 +75,11 @@ public class Syntactic
                 {
                     // Error
                     this.errorStack.push(new Error(200, tokens.get(i).getLine(), this.tag.get(tokens.get(i).getTag())));
-                    tokens = panicMode(tokens);
+                    LinkedList<Token> aux = tokens;
+                    aux = panicMode(aux);
+                    if (aux == null)
+                        break;
+                    tokens = aux;
                     return validString(tokens);
                 }
             try
