@@ -34,8 +34,8 @@ public class Syntactic
 
     private void initAutomaton() throws IOException
     {
-        String info = System.getProperty("user.dir") + "/src/syntactic/pda/files/info.txt";
-        String rules = System.getProperty("user.dir") + "/src/syntactic/pda/files/rules.txt";
+        String info = "syntactic/pda/files/info.txt";
+        String rules = "syntactic/pda/files/rules.txt";
 
         FileReader reader = new FileReader();
         reader.setFilename(info);

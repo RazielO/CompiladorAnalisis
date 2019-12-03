@@ -16,7 +16,7 @@ import java.util.Stack;
 public class Lexer
 {
     public static int line = 1;
-//    private Hashtable<String, Token> symbols = new Hashtable<>();
+    //    private Hashtable<String, Token> symbols = new Hashtable<>();
     private LinkedList<Token> symbols = new LinkedList<>();
 
     private static String code;
@@ -70,8 +70,8 @@ public class Lexer
 
         for (int i = 0; i < automata.length; i++)
         {
-            infoFileReader.setFilename(folder + definitions[0] + names[i] + fileEnding[0]);
-            rulesFileReader.setFilename(folder + definitions[1] + names[i] + fileEnding[1]);
+            infoFileReader.setFilename("lexer/automaton/" + definitions[0] + names[i] + fileEnding[0]);
+            rulesFileReader.setFilename("lexer/automaton/" + definitions[1] + names[i] + fileEnding[1]);
 
             automata[i] = new Automaton(rulesFileReader.read(), infoFileReader.read());
         }

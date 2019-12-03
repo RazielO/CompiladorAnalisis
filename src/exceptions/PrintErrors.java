@@ -16,7 +16,7 @@ public class PrintErrors
     private Stack<Error> errors;
     private Hashtable<Integer, String> errorCodes;
 
-    private final String ERRORS_FILE = System.getProperty("user.dir") + "/src/exceptions/errors.txt";
+    private final String ERRORS_FILE = "exceptions/errors.txt";
 
     /**
      * Constructor de la lase PrintErrors, llama al método init
